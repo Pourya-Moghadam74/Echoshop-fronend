@@ -1,12 +1,12 @@
 import React from 'react';
 import { Navbar, Container, Nav, Button } from 'react-bootstrap';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import { Link } from 'react-router-dom'; // Use Link for internal navigation
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import LoginPage from '../pages/LoginPage';
-import { useSelector } from 'react-redux'; // <-- NEW IMPORT
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { addToCart, removeFromCart, clearCart } from '../store/cartSlice';
+import { useCartSync } from '../hooks/useCartSync';
 
 export default function AppNavbar() {
     // Check authentication status locally
@@ -18,6 +18,9 @@ export default function AppNavbar() {
     const handleShowLogin = () => setShowLogin(true);
     const { itemCount, subtotal, items } = useSelector(state => state.cart); 
     const dispatch = useDispatch();
+    
+    // Auto-sync cart to backend when authenticated (debounced)
+    useCartSync();
     const handleRemoveFromCart = (id) => {
         dispatch(removeFromCart(id));
     };

@@ -5,8 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from '../store/authSlice'
 import { useSelector } from 'react-redux';
-import { clearCart } from '../store/cartSlice';
-import { syncCartToBackend } from '../utils/cartSync';
+import { clearCart, syncCart } from '../store/cartSlice';
 
 
 const LOGOUT_URL = 'http://localhost:8000/api/token/blacklist/';
@@ -21,10 +20,11 @@ export default function LogoutPage() {
   useEffect(() => {
     const performLogout = async () => {
       try {
-        // 1. Sync cart to backend before logout (if user is authenticated and has items)
-        if (refreshToken && cartItems && cartItems.length > 0) {
+        // 1. Sync cart to backend before logout (if user is authenticated)
+        // Always sync, even if cart is empty, to ensure backend cart is cleared
+        if (refreshToken) {
           try {
-            await syncCartToBackend(cartItems);
+            await dispatch(syncCart(cartItems || [])).unwrap();
           } catch (syncError) {
             // Log error but don't block logout
             console.error("Failed to sync cart to backend:", syncError);
