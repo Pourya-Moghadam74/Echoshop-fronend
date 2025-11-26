@@ -47,12 +47,19 @@ const cartSlice = createSlice({
       state.itemCount = state.items.length;
       state.subtotal = state.items.reduce((total, item) => total + (item.price * item.quantity), 0);
     },
+    // 4. Reducer for setting cart from backend data
+    setCartFromBackend: (state, action) => {
+      const { items, subtotal } = action.payload;
+      state.items = items;
+      state.itemCount = items.length;
+      state.subtotal = subtotal;
+    },
   }
 });
 
 
 // Export the action creators for components to use
-export const { addToCart, clearCart, removeFromCart } = cartSlice.actions;
+export const { addToCart, clearCart, removeFromCart, setCartFromBackend } = cartSlice.actions;
 
 // Export the reducer for the store configuration
 export default cartSlice.reducer;

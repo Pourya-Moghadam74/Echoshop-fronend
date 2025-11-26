@@ -5,6 +5,8 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { loginSuccess, setLoading } from '../store/authSlice'
 import { useSelector } from 'react-redux';
+import { setCartFromBackend } from '../store/cartSlice';
+import { loadCartFromBackend } from '../utils/cartLoad';
 
 const LOGIN_URL = 'http://localhost:8000/api/token/'; 
 
@@ -40,6 +42,14 @@ export default function LoginPage() {
       }
 
       if (response.status === 200 && response.data.access) {
+        // Load cart from backend after successful login
+        try {
+          const cartData = await loadCartFromBackend();
+          dispatch(setCartFromBackend(cartData));
+        } catch (cartError) {
+          console.error("Error loading cart after login:", cartError);
+          // Continue with login even if cart loading fails
+        }
 
         navigate('/'); // Redirect to homepage
       }
