@@ -46,7 +46,7 @@ export default function AppNavbar() {
                         {/* Cart Link (Always visible) */}
                         <Button variant='outline-light' className="mx-2" onClick={handleCartShow}>
                             {/* Placeholder for Cart Icon (e.g., Shopping Cart SVG) */}
-                            🛒 Cart ({itemCount}) - ${subtotal.toFixed(2)}
+                            🛒 Cart ({itemCount}){itemCount > 0 && ` - $${subtotal.toFixed(2)}`}
                         </Button>
                         <Offcanvas show={showCart} onHide={handleCartClose} placement="end">
                             <Offcanvas.Header closeButton>
