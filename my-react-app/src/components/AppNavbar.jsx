@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom'; // Use Link for internal navigation
 import { useState } from 'react';
 import LoginPage from '../pages/LoginPage';
 import { useSelector } from 'react-redux'; // <-- NEW IMPORT
+import { useDispatch } from 'react-redux';
+import { addToCart, removeFromCart, clearCart } from '../store/cartSlice';
 
 export default function AppNavbar() {
     // Check authentication status locally
@@ -13,9 +15,20 @@ export default function AppNavbar() {
     const [showCart, setShowCart] = useState(false);
     const handleCartShow = () => setShowCart(true);
     const handleCartClose = () => setShowCart(false);
-    const handleCloseLogin = () => setShowLogin(false);
     const handleShowLogin = () => setShowLogin(true);
     const { itemCount, subtotal, items } = useSelector(state => state.cart); 
+    const dispatch = useDispatch();
+    const handleRemoveFromCart = (id) => {
+        dispatch(removeFromCart(id));
+    };
+
+    const handleIncreaseQuantity = (item) => {
+        dispatch(addToCart({ ...item, quantity: 1 }));
+    };
+
+    const handleClearCart = () => {
+        dispatch(clearCart());
+    };
     return (
         <Navbar bg="dark" variant="dark" expand="lg" sticky="top">
             <Container fluid>
@@ -82,12 +95,36 @@ export default function AppNavbar() {
                                                                 ${(item.price * item.quantity).toFixed(2)}
                                                             </span>
                                                         </div>
-                                                        <div className="text-muted small mt-1">
-                                                            Qty:{' '}
-                                                            <span className="badge bg-secondary rounded-pill">
-                                                                {item.quantity}
+                                                        <div className="text-muted small mt-1 d-flex align-items-center justify-content-between">
+                                                            <span>
+                                                                x ${item.price.toFixed(2)}
                                                             </span>
-                                                            <span className="ms-2">x ${item.price.toFixed(2)}</span>
+                                                            <div
+                                                                className="d-inline-flex align-items-center border border-warning rounded-pill px-2 py-1 bg-white ms-2"
+                                                                style={{ minWidth: '90px', justifyContent: 'space-between' }}
+                                                            >
+                                                                <Button
+                                                                    variant="link" style={{ textDecoration: "none" }}
+                                                                    size="sm"
+                                                                    className="p-0 text-dark"
+                                                                    onClick={() => handleRemoveFromCart(item.id)}
+                                                                    aria-label={`Decrease quantity of ${item.name}`}
+                                                                >
+                                                                    −
+                                                                </Button>
+                                                                <span className="mx-2 fw-semibold">
+                                                                    {item.quantity}
+                                                                </span>
+                                                                <Button
+                                                                    variant="link" style={{ textDecoration: "none" }}
+                                                                    size="sm"
+                                                                    className="p-0 text-dark"
+                                                                    onClick={() => handleIncreaseQuantity(item)}
+                                                                    aria-label={`Increase quantity of ${item.name}`}
+                                                                >
+                                                                    +
+                                                                </Button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </li>

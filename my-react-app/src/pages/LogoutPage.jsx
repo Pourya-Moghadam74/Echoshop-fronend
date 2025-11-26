@@ -5,47 +5,61 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from '../store/authSlice'
 import { useSelector } from 'react-redux';
+import { clearCart } from '../store/cartSlice';
+import { syncCartToBackend } from '../utils/cartSync';
+
+
 const LOGOUT_URL = 'http://localhost:8000/api/token/blacklist/';
 
 export default function LogoutPage() {
   const [statusMessage, setStatusMessage] = useState("Logging out...");
-  const refreshToken = useSelector(state => state.auth.refreshToken)
+  const refreshToken = useSelector(state => state.auth.refreshToken);
+  const cartItems = useSelector(state => state.cart.items);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
   useEffect(() => {
+    const performLogout = async () => {
+      try {
+        // 1. Sync cart to backend before logout (if user is authenticated and has items)
+        if (refreshToken && cartItems && cartItems.length > 0) {
+          try {
+            await syncCartToBackend(cartItems);
+          } catch (syncError) {
+            // Log error but don't block logout
+            console.error("Failed to sync cart to backend:", syncError);
+          }
+        }
 
-    // 1. Check for Refresh Token
-    if (refreshToken) {
-      // 2. Blacklist the Refresh Token on the server
-      axios.post(
-        LOGOUT_URL, 
-        { refresh: refreshToken }, // Send the refresh token to be blacklisted
-        { withCredentials: true } 
-      )
-      .then(() => {
-        // Success (even if we get a 200 or 204 from the server)
-        dispatch(logout())
-      })
-      .catch((error) => {
-        // Handle failure (e.g., server down or token already invalid)
-        console.error("Server-side logout failed, performing client-side cleanup.", error);
-        // We proceed with client-side cleanup anyway to ensure the user is logged out locally
-        dispatch(logout())
-      });
-    } else {
-      // No refresh token found, just perform client-side cleanup
-      dispatch(logout())
-    }
-  }, [navigate]); // Depend on navigate
+        // 2. Check for Refresh Token and blacklist it
+        if (refreshToken) {
+          try {
+            await axios.post(
+              LOGOUT_URL, 
+              { refresh: refreshToken },
+              { withCredentials: true } 
+            );
+          } catch (error) {
+            // Handle failure (e.g., server down or token already invalid)
+            console.error("Server-side logout failed, performing client-side cleanup.", error);
+          }
+        }
 
-  // const performFrontendLogout = () => {
-  //   // 3. Client-Side Cleanup (CRITICAL STEP)
-  //   localStorage.removeItem('accessToken');
-  //   localStorage.removeItem('refreshToken');
-    
-  // setStatusMessage("You have been successfully logged out.");
-    
-    // 4. Redirect to a public page (e.g., Home or Login)
+        // 3. Perform client-side cleanup (always happens)
+        dispatch(logout());
+        dispatch(clearCart());
+      } catch (error) {
+        // Ensure cleanup happens even if something fails
+        console.error("Error during logout:", error);
+        dispatch(logout());
+        dispatch(clearCart());
+      }
+    };
+
+    performLogout();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run only once on mount
+
   setTimeout(() => {
     navigate('/'); 
   }, 1000);

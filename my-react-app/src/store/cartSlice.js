@@ -30,12 +30,29 @@ const cartSlice = createSlice({
       state.items = [];
       state.itemCount = 0;
       state.subtotal = 0.00;
-    }
+    },
+    // 3. Reducer for removing an item by ID
+    removeFromCart: (state, action) => {
+      const idToRemove = action.payload;
+      const item = state.items.find(item => item.id === idToRemove);
+      if (item) {
+        if (item.quantity > 1) {
+          item.quantity -= 1;
+        } else {
+          state.items = state.items.filter(item => item.id !== idToRemove);
+        }
+      }
+
+      // Update global state derived values
+      state.itemCount = state.items.length;
+      state.subtotal = state.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+    },
   }
 });
 
+
 // Export the action creators for components to use
-export const { addToCart, clearCart } = cartSlice.actions;
+export const { addToCart, clearCart, removeFromCart } = cartSlice.actions;
 
 // Export the reducer for the store configuration
 export default cartSlice.reducer;
