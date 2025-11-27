@@ -32,7 +32,7 @@ export default function ProductCard({ id, title, description, tag, price, likes,
                 variant="top" 
                 src={imageUrl || "/placeholder-card.jpg"} // Ensure placeholder-card.jpg exists in public/
                 alt={title} 
-                style={{ height: '180px', objectFit: 'cover' }}
+                style={{ height: '180px', objectFit: 'contain' }}
             />
             
             <Card.Body className="d-flex flex-column">

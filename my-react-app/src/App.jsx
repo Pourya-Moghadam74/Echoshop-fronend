@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import LoginPage from './pages/LoginPage.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
 import HomePage from './pages/HomePage.jsx';
+import ShopPage from './pages/ShopPage.jsx';
 import TestAuth from './pages/Test.jsx';
 import LogoutPage from './pages/LogoutPage.jsx';
 
@@ -17,6 +18,7 @@ export default function RouterConfig() {
       <Routes>
         {/* Route definitions use the imported page components */}
         <Route path="/" element={<HomePage />} />
+        <Route path="/shop" element={<ShopPage />} />
         {/* <Route path="/login" element={<LoginPage />} /> */}
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/test" element={<TestAuth />} />

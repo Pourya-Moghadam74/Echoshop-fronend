@@ -14,11 +14,22 @@ export default function CategoryTiles() {
         const fetchCategories = async () => {
             try {
                 const response = await axiosInstance.get(CATEGORY_URL); 
-                setCategories(response.data);
+                // Handle different response formats (array, paginated, etc.)
+                let categoriesData = [];
+                if (Array.isArray(response.data)) {
+                    categoriesData = response.data;
+                } else if (response.data.results && Array.isArray(response.data.results)) {
+                    categoriesData = response.data.results;
+                } else if (response.data && typeof response.data === 'object') {
+                    // If it's an object, try to extract array values
+                    categoriesData = Object.values(response.data).filter(Array.isArray)[0] || [];
+                }
+                setCategories(categoriesData);
                 setError(null);
             } catch (err) {
                 console.error("Error fetching categories:", err);
                 setError("Failed to load categories.");
+                setCategories([]); // Ensure it's always an array
             } finally {
                 setLoading(false);
             }
@@ -35,11 +46,12 @@ export default function CategoryTiles() {
     }
 
     // Display max 4 categories for the homepage layout
-    const featuredCategories = categories.slice(0, 4); 
+    // Ensure categories is an array before calling slice
+    const featuredCategories = Array.isArray(categories) ? categories.slice(0, 4) : []; 
 
     return (
         <div className="py-4">
-            <Row xs={1} sm={2} lg={3} className="g-4">
+            <Row xs={1} sm={2} lg={4} className="g-4">
                 {featuredCategories.map(category => ( 
                     <Col key={category.id}>
                         {/* Link the tile to the shop page with the category filter slug */}
