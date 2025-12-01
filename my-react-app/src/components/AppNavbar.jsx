@@ -19,7 +19,7 @@ export default function AppNavbar() {
     const { itemCount, subtotal, items } = useSelector(state => state.cart); 
     const dispatch = useDispatch();
     const handleCloseLogin = () => { setShowLogin(false) }
-    
+
     // Auto-sync cart to backend when authenticated (debounced)
     useCartSync();
     const handleRemoveFromCart = (id) => {

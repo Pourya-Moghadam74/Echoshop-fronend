@@ -14,22 +14,22 @@ export const useCartSync = () => {
 
   useEffect(() => {
     // Only sync if user is authenticated
-    if (!isAuthenticated) {
-      return;
-    }
+    // if (!isAuthenticated) {
+    //   return;
+    // }
 
     // Clear any pending sync
     if (syncTimeoutRef.current) {
       clearTimeout(syncTimeoutRef.current);
     }
 
-    // Debounce sync by 1 second to avoid excessive API calls
+    // Debounce sync by 3 second to avoid excessive API calls
     syncTimeoutRef.current = setTimeout(() => {
       dispatch(syncCart(cartItems)).catch((error) => {
         console.error('Auto-sync cart failed:', error);
         // Don't show error to user, just log it
       });
-    }, 1000);
+    }, 5000);
 
     // Cleanup on unmount or when dependencies change
     return () => {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
-import { Container, Form, Button, Card, Alert, Row, Col } from 'react-bootstrap';
+import { Container, Form, Button, Card, Alert, Row, Col, Stack } from 'react-bootstrap';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { loginSuccess, setLoading } from '../store/authSlice'
@@ -34,7 +34,8 @@ export default function LoginPage() {
       try {
         dispatch(loginSuccess({ 
           access: response.data.access,
-          refresh: response.data.refresh
+          refresh: response.data.refresh,
+          user: formData.username
          }));
       } catch (e) {
         console.error("Reducer error:", e);
@@ -58,10 +59,11 @@ export default function LoginPage() {
   };
 
   return (
-    // <Container className="d-flex justify-content-center align-items-center min-vh-100">
-      <Card className="shadow-lg p-4" style={{ width: '100%', maxWidth: '400px' }}>
-        <Card.Body>
-          <h2 className="text-center mb-4">Log In</h2>
+    <Stack gap={1} className="col-md-10 mx-auto">
+      <div className='m-1'>
+        <h2 className="text-center mb-4">Log In</h2>
+      </div>
+      <div>
           {error && (<Alert variant="danger" className="mb-3">Login failed: {error}</Alert>)}
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formUsername">
@@ -72,15 +74,21 @@ export default function LoginPage() {
               <Form.Label>Password</Form.Label>
               <Form.Control type="password" name="password" value={formData.password} onChange={handleChange} required />
             </Form.Group>
-            <Button variant="primary" type="submit" className="w-100" disabled={loading}>
+            <Button variant="primary" type="submit" className="w-100" disabled={loading}
+              style={{
+                backgroundColor: "#FFD60A",
+                color: "#000",
+                border: "1px solid #000",
+                fontWeight: "450"
+              }}
+            >
               {loading ? 'Logging In...' : 'Log In'}
             </Button>
             <p className="text-center text-muted small mt-3">
               Don't have an account? <a href="/signup">Sign Up Here</a>
             </p>
           </Form>
-        </Card.Body>
-      </Card>
-    // </Container>
+        </div>
+    </Stack>
   );
 };

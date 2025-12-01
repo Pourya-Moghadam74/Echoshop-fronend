@@ -41,7 +41,7 @@ function AccountSidebar() {
 
   return (
     <nav className="nav-menu active" style={{ minWidth: 250, borderRight: "1px solid #eee", background: "#fff" }}>
-      <ul className="nav-menu-items" style={{ paddingTop: 32 }}>
+      <ul className="nav-menu-items" style={{ paddingTop: 0 }}>
         <li style={{ padding: "16px 16px 32px 16px", borderBottom: "1px solid #eee" }}>
           <h2 style={{ fontSize: "1.4rem", fontWeight: "700", color: "#222", letterSpacing: ".5px" }}>Your Account</h2>
         </li>

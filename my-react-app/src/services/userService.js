@@ -16,3 +16,14 @@ export const fetchUserAddresses = async () => { // Renamed for clarity
         
     }
 };
+
+
+export const updateUserAddresses = async (addressData) => {
+    try {
+        const response = await axiosInstance.patch(`addresses/1/`, addressData);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating user addresses:', error);
+        throw error;
+    }
+};

@@ -30,6 +30,7 @@ const authSlice = createSlice({
       // Also update localStorage here (CRITICAL)
       localStorage.setItem('accessToken', action.payload.access);
       localStorage.setItem('refreshToken', action.payload.refresh);
+      localStorage.removeItem('cart');
     },
     
     // Action for successful token refresh
@@ -48,6 +49,7 @@ const authSlice = createSlice({
       // Clear localStorage (CRITICAL)
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
+      localStorage.removeItem('cart')
     },
     
     // Actions for global loading state if needed

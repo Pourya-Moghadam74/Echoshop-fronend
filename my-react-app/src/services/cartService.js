@@ -100,38 +100,39 @@ export const clearCartOnBackend = async () => {
 };
 
 
+let isSyncing = false;
+
 export const syncCartToBackend = async (frontendItems = []) => {
+  if (isSyncing) return; // ← prevent duplicate syncs
+
+  isSyncing = true;
+
   try {
-    // Step 1: Get current backend cart
-    const backendCart = await axiosInstance.get('cart/');
+    const backendCart = await axiosInstance.get("cart/");
     const backendItems = backendCart.data.items || [];
 
-    // Step 2: Delete all existing backend items
-    if (backendItems.length > 0) {
-      const deletePromises = backendItems.map(item =>
+    // Delete every backend item
+    await Promise.all(
+      backendItems.map(item =>
         axiosInstance.delete(`cart/items/${item.id}/`).catch(err => {
-          // Ignore 404 errors (item already deleted)
-          if (err.response?.status !== 404) {
-            throw err;
-          }
+          if (err.response?.status !== 404) throw err;
         })
-      );
-      await Promise.all(deletePromises);
-    }
+      )
+    );
 
-    // Step 3: Add all frontend items
-    if (frontendItems.length > 0) {
-      const addPromises = frontendItems.map(item =>
-        axiosInstance.post('cart/items/', {
+    // Add items from frontend
+    await Promise.all(
+      frontendItems.map(item =>
+        axiosInstance.post("cart/items/", {
           product_id: item.id,
           quantity: item.quantity,
         })
-      );
-      await Promise.all(addPromises);
-    }
-  } catch (error) {
-    console.error('Error syncing cart to backend:', error);
-    throw error;
+      )
+    );
+
+  } finally {
+    isSyncing = false;
   }
 };
+
 
