@@ -1,6 +1,17 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as cartService from '../services/cartService';
 
+const saveCart = (state) => {
+  localStorage.setItem(
+    "cart",
+    JSON.stringify({
+      items: state.items,
+      itemCount: state.itemCount,
+      subtotal: state.subtotal,
+    })
+  );
+};
+
 // Helper function to calculate cart totals
 const calculateTotals = (items) => {
   return {
@@ -104,6 +115,7 @@ const cartSlice = createSlice({
       state.items = [];
       state.itemCount = 0;
       state.subtotal = 0.00;
+      localStorage.removeItem("cart"); // optional
     },
 
     // Set cart from backend data (used on login)
@@ -126,6 +138,7 @@ const cartSlice = createSlice({
         state.items = action.payload.items;
         state.itemCount = action.payload.itemCount;
         state.subtotal = action.payload.subtotal;
+        saveCart(state);
       })
       .addCase(loadCart.rejected, (state, action) => {
         state.loading = false;
@@ -136,6 +149,7 @@ const cartSlice = createSlice({
         // Don't set loading for sync to avoid UI flicker
       })
       .addCase(syncCart.fulfilled, (state) => {
+        saveCart(state);
         // Sync successful, no state change needed
       })
       .addCase(syncCart.rejected, (state, action) => {

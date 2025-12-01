@@ -60,7 +60,7 @@ export default function CategoryTiles() {
                               style={{ textDecoration: 'none', overflow: 'hidden' }}>
                             
                             {/* Placeholder for visual tile background */}
-                            <div style={{ height: '120px', 
+                            <div style={{ height: '360px', 
                                           backgroundColor: '#ddd', 
                                           backgroundImage: `url(/category-${category.id}-bg.jpg)`, // Add images to public/
                                           backgroundSize: 'cover',

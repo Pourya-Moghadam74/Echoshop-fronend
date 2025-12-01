@@ -18,6 +18,7 @@ export default function AppNavbar() {
     const handleShowLogin = () => setShowLogin(true);
     const { itemCount, subtotal, items } = useSelector(state => state.cart); 
     const dispatch = useDispatch();
+    const handleCloseLogin = () => { setShowLogin(false) }
     
     // Auto-sync cart to backend when authenticated (debounced)
     useCartSync();
@@ -176,7 +177,7 @@ export default function AppNavbar() {
                                 <Button variant="outline-light" onClick={handleShowLogin} className="me-2">
                                     Log In
                                 </Button>
-                                <Offcanvas show={showLogin} onHide={isAuthenticated} placement="end">
+                                <Offcanvas show={showLogin} onHide={handleCloseLogin} placement="end">
                                     <Offcanvas.Header closeButton>
                                     {/* <Offcanvas.Title>Log In</Offcanvas.Title> */}
                                     </Offcanvas.Header>

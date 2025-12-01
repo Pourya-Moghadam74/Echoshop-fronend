@@ -1,14 +1,5 @@
 import axiosInstance from '../api/axiosInstance';
 
-/**
- * Cart Service - Handles all backend cart operations
- * Best Practice: Centralized API layer for cart operations
- */
-
-/**
- * Get the current cart from backend
- * @returns {Promise<Object>} Cart data with items, itemCount, subtotal
- */
 export const getCart = async () => {
   try {
     const response = await axiosInstance.get('cart/');
@@ -38,12 +29,7 @@ export const getCart = async () => {
   }
 };
 
-/**
- * Add item to cart on backend
- * @param {number} productId - Product ID
- * @param {number} quantity - Quantity to add
- * @returns {Promise<Object>} Created/updated cart item
- */
+
 export const addItemToCart = async (productId, quantity = 1) => {
   try {
     const response = await axiosInstance.post('cart/items/', {
@@ -57,12 +43,8 @@ export const addItemToCart = async (productId, quantity = 1) => {
   }
 };
 
-/**
- * Update cart item quantity on backend
- * @param {number} cartItemId - Cart item ID
- * @param {number} quantity - New quantity
- * @returns {Promise<Object>} Updated cart item
- */
+
+
 export const updateCartItem = async (cartItemId, quantity) => {
   try {
     // Since PATCH might not work reliably, we'll delete and recreate
@@ -94,10 +76,7 @@ export const removeItemFromCart = async (cartItemId) => {
   }
 };
 
-/**
- * Clear entire cart on backend
- * @returns {Promise<void>}
- */
+
 export const clearCartOnBackend = async () => {
   try {
     const cart = await getCart();
@@ -120,12 +99,7 @@ export const clearCartOnBackend = async () => {
   }
 };
 
-/**
- * Sync frontend cart state to backend (replace backend cart with frontend state)
- * Best Practice: Complete replacement ensures consistency
- * @param {Array} frontendItems - Frontend cart items
- * @returns {Promise<void>}
- */
+
 export const syncCartToBackend = async (frontendItems = []) => {
   try {
     // Step 1: Get current backend cart

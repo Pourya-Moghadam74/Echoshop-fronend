@@ -1,0 +1,25 @@
+.hero-carousel {
+    height: 70vh;
+    overflow: hidden;
+  }
+  
+  .hero-img {
+    height: 70vh;
+    object-fit: cover;
+    filter: brightness(70%);
+  }
+  
+  .carousel-caption {
+    bottom: 25%;
+  }
+  
+  .hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+  }
+  
+  .hero-text {
+    font-size: 1.3rem;
+    margin-top: 10px;
+  }
+  

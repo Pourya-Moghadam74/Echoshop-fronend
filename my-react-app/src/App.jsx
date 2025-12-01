@@ -10,6 +10,10 @@ import HomePage from './pages/HomePage.jsx';
 import ShopPage from './pages/ShopPage.jsx';
 import TestAuth from './pages/Test.jsx';
 import LogoutPage from './pages/LogoutPage.jsx';
+import AccountLayout from './pages/Account/AccountLayout.jsx';
+import AccountPage from './pages/Account/AccountPage.jsx'
+import AccountProfilePage from './pages/Account/AccountProfilePage.jsx';  
+
 
 export default function RouterConfig() {
   return (
@@ -19,10 +23,17 @@ export default function RouterConfig() {
         {/* Route definitions use the imported page components */}
         <Route path="/" element={<HomePage />} />
         <Route path="/shop" element={<ShopPage />} />
-        {/* <Route path="/login" element={<LoginPage />} /> */}
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/test" element={<TestAuth />} />
         <Route path="/logout" element={<LogoutPage />} />
+        <Route path="/account" element={<AccountLayout />}>
+          <Route index element={<AccountPage />} />           
+          <Route path="profile" element={<AccountProfilePage />} />  
+          {/* <Route path="orders" element={<OrdersPage />} />     
+          <Route path="addresses" element={<AddressesPage />} /> 
+          <Route path="settings" element={<SettingsPage />} />  */}
+        </Route>
       </Routes>
     </BrowserRouter>
   );
