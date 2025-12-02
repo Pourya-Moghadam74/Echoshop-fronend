@@ -22,14 +22,14 @@ export default function LogoutPage() {
       try {
         // 1. Sync cart to backend before logout (if user is authenticated)
         // Always sync, even if cart is empty, to ensure backend cart is cleared
-        if (refreshToken) {
-          try {
-            await dispatch(syncCart(cartItems || [])).unwrap();
-          } catch (syncError) {
-            // Log error but don't block logout
-            console.error("Failed to sync cart to backend:", syncError);
-          }
-        }
+        // if (refreshToken) {
+        //   try {
+        //     await dispatch(syncCart(cartItems || [])).unwrap();
+        //   } catch (syncError) {
+        //     // Log error but don't block logout
+        //     console.error("Failed to sync cart to backend:", syncError);
+        //   }
+        // }
 
         // 2. Check for Refresh Token and blacklist it
         if (refreshToken) {

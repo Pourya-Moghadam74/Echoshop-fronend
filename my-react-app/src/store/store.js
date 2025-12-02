@@ -13,7 +13,10 @@ function loadState() {
         items: saved.items,
         itemCount: saved.itemCount,
         subtotal: saved.subtotal,
-      },
+        loadedFromBackend: false,
+        loading: false,
+        error: null,
+      }
     };
   } catch (e) {
     return undefined;

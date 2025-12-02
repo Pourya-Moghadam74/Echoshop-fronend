@@ -55,6 +55,7 @@ const cartSlice = createSlice({
     subtotal: 0.00,
     loading: false,
     error: null,
+    loadedFromBackend: false,
   },
   reducers: {
     // Add item to cart (frontend only - sync handled separately)
@@ -125,6 +126,9 @@ const cartSlice = createSlice({
       state.itemCount = itemCount || 0;
       state.subtotal = subtotal || 0.00;
     },
+    resetLoadedFromBackend: (state) => {
+      state.loadedFromBackend = false;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -138,6 +142,7 @@ const cartSlice = createSlice({
         state.items = action.payload.items;
         state.itemCount = action.payload.itemCount;
         state.subtotal = action.payload.subtotal;
+        state.loadedFromBackend = true;
         saveCart(state);
       })
       .addCase(loadCart.rejected, (state, action) => {
@@ -161,7 +166,7 @@ const cartSlice = createSlice({
 });
 
 // Export actions
-export const { addToCart, removeFromCart, updateQuantity, clearCart, setCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, updateQuantity, clearCart, setCart, resetLoadedFromBackend } = cartSlice.actions;
 
 // Export reducer
 export default cartSlice.reducer;
