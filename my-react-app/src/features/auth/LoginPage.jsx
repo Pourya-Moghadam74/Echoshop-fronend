@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
-import { Container, Form, Button, Card, Alert, Row, Col, Stack } from 'react-bootstrap';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Form, Button, Alert, Stack } from 'react-bootstrap';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { loginSuccess, setLoading } from '../store/authSlice'
-import { useSelector } from 'react-redux';
-import { loadCart } from '../store/cartSlice';
+import { loginSuccess, setLoading } from "../auth/authSlice";
+import { useSelector, useDispatch } from 'react-redux';
+import { loadCart } from "../cart/cartSlice";
 
 const LOGIN_URL = 'http://localhost:8000/api/token/'; 
 
@@ -59,7 +58,11 @@ export default function LoginPage() {
   };
 
   return (
-    <Stack gap={1} className="col-md-10 mx-auto">
+    <Stack 
+      gap={1} 
+      className="mx-auto" 
+      style={{ maxWidth: '300px', width: '100%' }}
+    >
       <div className='m-1'>
         <h2 className="text-center mb-4">Log In</h2>
       </div>
@@ -90,5 +93,6 @@ export default function LoginPage() {
           </Form>
         </div>
     </Stack>
+
   );
 };

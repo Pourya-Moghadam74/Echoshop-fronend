@@ -3,9 +3,9 @@ import { Navbar, Container, Nav, Button } from 'react-bootstrap';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import LoginPage from '../pages/LoginPage';
+import LoginPage from "../features/auth/LoginPage.jsx";
 import { useSelector, useDispatch } from 'react-redux';
-import { addToCart, removeFromCart, clearCart } from '../store/cartSlice';
+import { addToCart, removeFromCart, clearCart } from "../features/cart/cartSlice";
 import { useCartSync } from '../hooks/useCartSync';
 
 export default function AppNavbar() {

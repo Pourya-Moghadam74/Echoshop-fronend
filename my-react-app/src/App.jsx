@@ -4,28 +4,24 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // Removed all internal component logic and used imports instead
 
 // 1. Import components from their new /pages directory
-import LoginPage from './pages/LoginPage.jsx';
-import SignUpPage from './pages/SignUpPage.jsx';
-import HomePage from './pages/HomePage.jsx';
-import ShopPage from './pages/ShopPage.jsx';
-import TestAuth from './pages/Test.jsx';
-import LogoutPage from './pages/LogoutPage.jsx';
-import AccountLayout from './pages/Account/AccountLayout.jsx';
-import AccountPage from './pages/Account/AccountPage.jsx'
-import AccountProfilePage from './pages/Account/AccountProfilePage.jsx';  
+import LoginPage from "./features/auth/LoginPage.jsx";
+import SignUpPage from './features/auth/SignUpPage.jsx';
+import HomePage from './features/home/HomePage.jsx';
+import ShopPage from './features/shop/ShopPage.jsx';
+import LogoutPage from './features/auth/LogoutPage.jsx';
+import AccountLayout from './features/account/AccountLayout.jsx';
+import AccountPage from './features/account/AccountPage.jsx';
+import AccountProfilePage from './features/account/AccountProfilePage.jsx';  
 
 
 export default function RouterConfig() {
   return (
-    // BrowserRouter wraps the entire application
     <BrowserRouter>
       <Routes>
-        {/* Route definitions use the imported page components */}
         <Route path="/" element={<HomePage />} />
         <Route path="/shop" element={<ShopPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/test" element={<TestAuth />} />
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/account" element={<AccountLayout />}>
           <Route index element={<AccountPage />} />           

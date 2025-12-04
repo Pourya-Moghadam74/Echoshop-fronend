@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import * as cartService from '../services/cartService';
+import * as cartService from "../cart/cartService";
 
 const saveCart = (state) => {
   localStorage.setItem(

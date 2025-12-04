@@ -1,8 +1,8 @@
 import React from 'react';
 import { Card, Badge, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux'; // <-- NEW IMPORT
-import { addToCart } from '../store/cartSlice';
+import { useDispatch } from 'react-redux';
+import { addToCart } from "../features/cart/cartSlice";
 
 export default function ProductCard({ id, title, description, tag, price, likes, imageUrl }) {
     const dispatch = useDispatch(); // Hook to get the dispatcher

@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Container, Card, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { logout } from '../store/authSlice'
-import { useSelector } from 'react-redux';
-import { clearCart, syncCart } from '../store/cartSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from "../auth/authSlice";
+import { clearCart } from "../cart/cartSlice";
 
 
 const LOGOUT_URL = 'http://localhost:8000/api/token/blacklist/';
@@ -20,18 +19,6 @@ export default function LogoutPage() {
   useEffect(() => {
     const performLogout = async () => {
       try {
-        // 1. Sync cart to backend before logout (if user is authenticated)
-        // Always sync, even if cart is empty, to ensure backend cart is cleared
-        // if (refreshToken) {
-        //   try {
-        //     await dispatch(syncCart(cartItems || [])).unwrap();
-        //   } catch (syncError) {
-        //     // Log error but don't block logout
-        //     console.error("Failed to sync cart to backend:", syncError);
-        //   }
-        // }
-
-        // 2. Check for Refresh Token and blacklist it
         if (refreshToken) {
           try {
             await axios.post(

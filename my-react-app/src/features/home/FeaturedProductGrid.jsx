@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Spinner, Alert, Button } from 'react-bootstrap';
-// Updated imports based on likely file placement/compilation environment needs
-// If files are siblings in src/, we assume direct import works, but using 
-// './ProductCard' is better if they are in the same 'components' folder.
-// Since the path is failing, we must assume the compiler needs the file extension or a simpler path.
-import ProductCard from './ProductCard.jsx'; // Explicitly set JSX extension
-import axiosInstance from '../api/axiosInstance.js'; // Assuming api is outside components/
+import ProductCard from "../../components/ProductCard.jsx" 
+import axiosInstance from '../../api/axiosInstance.js'; 
 
-// Fetches 4 featured products from the Django API
+
 const FEATURED_PRODUCTS_URL = 'products/'; 
 
 export default function FeaturedProductGrid() {

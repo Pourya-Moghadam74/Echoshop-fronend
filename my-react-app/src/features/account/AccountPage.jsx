@@ -1,5 +1,3 @@
-import React from "react";
-import AccountSidebar from "../../components/AccountSidebar.jsx";
 import { useSelector } from "react-redux";
 
 function AccountPage() {

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { syncCart, resetLoadedFromBackend  } from '../store/cartSlice';
+import { syncCart, resetLoadedFromBackend  } from "../features/cart/cartSlice";
 
 const saveCart = (state) => {
   localStorage.setItem(
@@ -33,10 +33,8 @@ export const useCartSync = () => {
       saveCart(cart)
       return;
     }
-    console.log(backendFlag)
     if (backendFlag) {
       dispatch(resetLoadedFromBackend());
-      console.log(backendFlag)
       return;
     }
       

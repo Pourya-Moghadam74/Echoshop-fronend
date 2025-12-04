@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Form, Button, Spinner, Alert, InputGroup } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
-import ProductCard from '../components/ProductCard';
-import AppNavbar from '../components/AppNavbar';
-import SiteFooter from '../components/SiteFooter';
-import axiosInstance from '../api/axiosInstance';
+import ProductCard from '../../components/ProductCard';
+import AppNavbar from '../../components/AppNavbar';
+import SiteFooter from '../../components/SiteFooter';
+import axiosInstance from '../../api/axiosInstance';
 
 export default function ShopPage() {
   const [searchParams, setSearchParams] = useSearchParams();

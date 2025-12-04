@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Spinner, Alert } from 'react-bootstrap';
-import axiosInstance from '../api/axiosInstance.js'; // Assuming api is outside components/
+import axiosInstance from '../../api/axiosInstance.js'; // Assuming api is outside components/
 import { Link } from 'react-router-dom';
 
 const CATEGORY_URL = 'categories/'; 

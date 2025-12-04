@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUserAddresses, updateUserAddresses } from "../../store/userSlice";
+import { fetchUserAddresses, updateUserAddresses } from "../user/userSlice";
 
 function AccountProfilePage() {
   const dispatch = useDispatch();
@@ -51,7 +51,6 @@ function AccountProfilePage() {
     dispatch(updateUserAddresses(formData));
     setIsEditing(false);
   };
-
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 

@@ -1,4 +1,4 @@
-import axiosInstance from '../api/axiosInstance';
+import axiosInstance from '../../api/axiosInstance';
 
 export const fetchUserAddresses = async () => { // Renamed for clarity
     try {

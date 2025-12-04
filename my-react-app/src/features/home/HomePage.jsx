@@ -1,15 +1,12 @@
-import React from 'react';
-import AppNavbar from '../components/AppNavbar'; // Assuming you create this
-import HeroBanner from '../components/HeroBanner'; // Assuming you create this
-import FeaturedProductGrid from '../components/FeaturedProductGrid'; // Assuming you create this
-import CategoryTiles from '../components/CategoryTiles';
-import SiteFooter from '../components/SiteFooter'; // Assuming you create this
-import ValuePropositionBanner from '../components/ValuePropositionBanner';
+import AppNavbar from "../../components/AppNavbar"; 
+import HeroBanner from './HeroBanner'; 
+import FeaturedProductGrid from './FeaturedProductGrid'; 
+import CategoryTiles from './CategoryTiles';
+import SiteFooter from '../../components/SiteFooter'; 
+import ValuePropositionBanner from './ValuePropositionBanner';
 import { useSelector } from 'react-redux';
 
 export default function HomePage() {
-    // This is where you would put your conditional logic (checking localStorage for auth state)
-    // to pass user-specific props down to the navbar or other components.
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     return (
         <div>

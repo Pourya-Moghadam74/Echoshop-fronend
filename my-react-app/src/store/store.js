@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
-import cartReducer from './cartSlice';
-import authReducer from './authSlice';
-import userReducer from './userSlice';
+import cartReducer from "../features/cart/cartSlice";
+import authReducer from '../features/auth/authSlice';
+import userReducer from '../features/user/userSlice';
 
 function loadState() {
   try {
