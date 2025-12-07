@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
 // Removed all internal component logic and used imports instead
 
 // 1. Import components from their new /pages directory
@@ -16,20 +15,23 @@ import AccountProfilePage from './features/account/AccountProfilePage.jsx';
 
 export default function RouterConfig() {
   return (
+    // <h1 class="text-3xl font-bold underline text-red-500">
+    //   Hello world!
+    // </h1>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/shop" element={<ShopPage />} />
+        {/* <Route path="/shop" element={<ShopPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/account" element={<AccountLayout />}>
           <Route index element={<AccountPage />} />           
-          <Route path="profile" element={<AccountProfilePage />} />  
+          <Route path="profile" element={<AccountProfilePage />} />   */}
           {/* <Route path="orders" element={<OrdersPage />} />     
           <Route path="addresses" element={<AddressesPage />} /> 
           <Route path="settings" element={<SettingsPage />} />  */}
-        </Route>
+        {/* </Route> */}
       </Routes>
     </BrowserRouter>
   );

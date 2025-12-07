@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Form, Button, Card, Alert, Row, Col } from 'react-bootstrap';
+// import { Container, Form, Button, Card, Alert, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 
 const REGISTER_URL = 'http://localhost:8000/api/register/'; 

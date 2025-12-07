@@ -1,199 +1,159 @@
-import React from 'react';
-import { Navbar, Container, Nav, Button } from 'react-bootstrap';
-import Offcanvas from 'react-bootstrap/Offcanvas';
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
-import LoginPage from "../features/auth/LoginPage.jsx";
-import { useSelector, useDispatch } from 'react-redux';
-import { addToCart, removeFromCart, clearCart } from "../features/cart/cartSlice";
-import { useCartSync } from '../hooks/useCartSync';
+import React, { useState } from 'react';
+import { Search, ShoppingCart, MapPin, ChevronDown, Menu, User, Repeat2 } from 'lucide-react';
 
-export default function AppNavbar() {
-    // Check authentication status locally
-    const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
-    const [showLogin, setShowLogin] = useState(false);
-    const [showCart, setShowCart] = useState(false);
-    const handleCartShow = () => setShowCart(true);
-    const handleCartClose = () => setShowCart(false);
-    const handleShowLogin = () => setShowLogin(true);
-    const { itemCount, subtotal, items } = useSelector(state => state.cart); 
-    const dispatch = useDispatch();
-    const handleCloseLogin = () => { setShowLogin(false) }
+// Main component, designed to mimic the key elements and layout of the Amazon navbar
+const Navbar = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
-    // Auto-sync cart to backend when authenticated (debounced)
-    useCartSync();
-    const handleRemoveFromCart = (id) => {
-        dispatch(removeFromCart(id));
-    };
+  const categories = [
+    'All', 'Electronics', 'Books', 'Home & Kitchen', 'Toys & Games', 'Software'
+  ];
 
-    const handleIncreaseQuantity = (item) => {
-        dispatch(addToCart({ ...item, quantity: 1 }));
-    };
+  // Helper component for the smaller, two-line link structure (like "Account & Lists")
+  const NavLink = ({ topText, bottomText, icon: Icon, isDropdown = false }) => (
+    <div 
+      className={`group flex flex-col justify-center h-full p-2 text-white border border-transparent hover:border-white cursor-pointer ${bottomText === 'Cart' ? 'flex-row items-end' : ''}`}
+    >
+      {Icon && bottomText === 'Cart' ? (
+        <>
+          <div className="relative">
+            <Icon size={30} strokeWidth={1.5} />
+            <span className="absolute -top-1 left-4 w-4 h-4 bg-red-500 text-xs font-bold rounded-full flex items-center justify-center text-black">
+              0
+            </span>
+          </div>
+          <span className="ml-1 text-base font-bold whitespace-nowrap">Cart</span>
+        </>
+      ) : (
+        <>
+          <span className="text-xs leading-3 whitespace-nowrap">{topText}</span>
+          <span className="font-bold text-sm whitespace-nowrap flex items-center">
+            {bottomText} {isDropdown && <ChevronDown size={14} className="ml-0.5" />}
+          </span>
+        </>
+      )}
+    </div>
+  );
 
-    const handleClearCart = () => {
-        dispatch(clearCart());
-    };
-    return (
-        <Navbar bg="dark" variant="dark" expand="lg" sticky="top">
-            <Container fluid>
-                
-                {/* 1. Logo/Brand */}
-                <Navbar.Brand as={Link} to="/" className="fw-bold fs-4 text-warning">
-                    E-Commerce Store
-                </Navbar.Brand>
-                
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                
-                <Navbar.Collapse id="basic-navbar-nav">
-                    
-                    {/* 2. Main Navigation Links (Left) */}
-                    <Nav className="me-auto">
-                        <Nav.Link as={Link} to="/">Home</Nav.Link>
-                        <Nav.Link as={Link} to="/shop">Shop All</Nav.Link>
-                        {/* Optional protected link */}
-                        {isAuthenticated && (
-                            <Nav.Link as={Link} to="/account">Account</Nav.Link>
-                        )}
-                    </Nav>
-                    
-                    {/* 3. Utility/Auth Links (Right, pushed by 'ms-auto') */}
-                    {/* This group pushes to the right due to the "me-auto" on the primary Nav above */}
-                    <Nav className="d-flex align-items-center">
-                        
-                        {/* Cart Link (Always visible) */}
-                        <Button variant='outline-light' className="mx-2" onClick={handleCartShow}>
-                            {/* Placeholder for Cart Icon (e.g., Shopping Cart SVG) */}
-                            🛒 Cart ({itemCount}){itemCount > 0 && ` - $${subtotal.toFixed(2)}`}
-                        </Button>
-                        <Offcanvas show={showCart} onHide={handleCartClose} placement="end">
-                            <Offcanvas.Header closeButton>
-                                <Offcanvas.Title>Your Cart</Offcanvas.Title>
-                            </Offcanvas.Header>
-                            <Offcanvas.Body className="d-flex flex-column">
-                                {items.length === 0 ? (
-                                    <div className="text-center text-muted py-5">
-                                        <div className="display-6 mb-3">🛒</div>
-                                        <h5 className="fw-semibold mb-2">Your cart is empty</h5>
-                                        <p className="mb-3">Browse products and add items to your cart.</p>
-                                        <Button
-                                            variant="dark"
-                                            as={Link}
-                                            to="/shop"
-                                            onClick={handleCartClose}
-                                        >
-                                            Start Shopping
-                                        </Button>
-                                    </div>
-                                ) : (
-                                    <>
-                                        <ul className="list-group mb-3">
-                                            {items.map(item => (
-                                                <li
-                                                    key={item.id}
-                                                    className="list-group-item border-0 border-bottom d-flex justify-content-between align-items-center px-0"
-                                                >
-                                                    <div className="flex-grow-1 me-3">
-                                                        <div className="d-flex justify-content-between align-items-start">
-                                                            <span className="fw-semibold">{item.name}</span>
-                                                            <span className="fw-bold">
-                                                                ${(item.price * item.quantity).toFixed(2)}
-                                                            </span>
-                                                        </div>
-                                                        <div className="text-muted small mt-1 d-flex align-items-center justify-content-between">
-                                                            <span>
-                                                                x ${item.price.toFixed(2)}
-                                                            </span>
-                                                            <div
-                                                                className="d-inline-flex align-items-center border border-warning rounded-pill px-2 py-1 bg-white ms-2"
-                                                                style={{ minWidth: '90px', justifyContent: 'space-between' }}
-                                                            >
-                                                                <Button
-                                                                    variant="link" style={{ textDecoration: "none" }}
-                                                                    size="sm"
-                                                                    className="p-0 text-dark"
-                                                                    onClick={() => handleRemoveFromCart(item.id)}
-                                                                    aria-label={`Decrease quantity of ${item.name}`}
-                                                                >
-                                                                    −
-                                                                </Button>
-                                                                <span className="mx-2 fw-semibold">
-                                                                    {item.quantity}
-                                                                </span>
-                                                                <Button
-                                                                    variant="link" style={{ textDecoration: "none" }}
-                                                                    size="sm"
-                                                                    className="p-0 text-dark"
-                                                                    onClick={() => handleIncreaseQuantity(item)}
-                                                                    aria-label={`Increase quantity of ${item.name}`}
-                                                                >
-                                                                    +
-                                                                </Button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            ))}
-                                        </ul>
+  return (
+    <div className="flex flex-col w-full">
+      {/* Top Navbar Section (Main Navigation) */}
+      <div className="bg-[#124b45] flex justify-between gap-2 items-center h-[60px] px-2 text-white font-inter shadow-md">
+        
+        {/* 1. Logo and Home Link */}
+        <div className="flex items-center h-full border border-transparent p-1 mr-2">
+          {/* Custom SVG Logo to replicate the look */}
+          <svg className="h-6 w-auto" viewBox="0 0 100 30" fill="white" xmlns="my-react-app\public\logo.png">
+            <rect x="0" y="0" width="100" height="30" fill="none"/>
+            <text x="50" y="20" fontSize="18" fontWeight="bold" fill="white" textAnchor="middle">
+              ECO SHOP
+            </text>
+            <text x="50" y="28" fontSize="6" fontWeight="normal" fill="white" textAnchor="middle">
+              Marketplace
+            </text>
+          </svg>
+        </div>
 
-                                        <div className="mt-auto border-top pt-3">
-                                            <div className="d-flex justify-content-between align-items-center mb-3">
-                                                <span className="fw-semibold">Subtotal</span>
-                                                <span className="fs-5 fw-bold text-success">
-                                                    ${subtotal.toFixed(2)}
-                                                </span>
-                                            </div>
-                                            <div className="d-grid gap-2">
-                                                <Button
-                                                    variant="warning"
-                                                    as={Link}
-                                                    to="/checkout"
-                                                    onClick={handleCartClose}
-                                                >
-                                                    Proceed to Checkout
-                                                </Button>
-                                                <Button
-                                                    variant="outline-secondary"
-                                                    as={Link}
-                                                    to="/shop"
-                                                    onClick={handleCartClose}
-                                                >
-                                                    Continue Shopping
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    </>
-                                )}
-                            </Offcanvas.Body>
-                        </Offcanvas>
+        {/* 2. Deliver To Location (Hidden on small screens) */}
+        <div className="hidden lg:flex items-center gap-0.5">
+            <div className='flex'>
+                <MapPin size={18} />    
+            </div>
+            <div className="flex flex-col leading-none">
+                <p className="text-xs">Deliver to</p>
+                <p className="font-bold text-sm">Toronto M4Y</p>
+            </div>
+        </div>
 
-                        {isAuthenticated ? (
-                            // Logged-in view
-                            <Button variant="outline-danger" as={Link} to="/logout">
-                                Log Out
-                            </Button>
-                        ) : (
-                            // Anonymous view
-                            <>
-                                <Button variant="outline-light" onClick={handleShowLogin} className="me-2">
-                                    Log In
-                                </Button>
-                                <Offcanvas show={showLogin} onHide={handleCloseLogin} placement="end">
-                                    <Offcanvas.Header closeButton>
-                                    {/* <Offcanvas.Title>Log In</Offcanvas.Title> */}
-                                    </Offcanvas.Header>
-                                    <Offcanvas.Body>
-                                    <LoginPage />
-                                    </Offcanvas.Body>
-                                </Offcanvas>
-                                <Button variant="warning" onClick={handleShowLogin}>
-                                    Sign Up
-                                </Button>
-                            </>
-                        )}
-                    </Nav>
-                    
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
-    );
-}
+        {/* 3. Search Bar (Takes most of the horizontal space) */}
+        <div className="flex-grow h-[40px] hidden md:flex mx-2">
+          
+          {/* Category Dropdown */}
+          <div className="relative group">
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="bg-gray-200 text-gray-800 text-sm h-full rounded-l-md border-r border-gray-400 focus:outline-none px-2 cursor-pointer hover:bg-gray-300 transition duration-150"
+            >
+              {categories.map(cat => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
+          </div>
+          
+          {/* Search Input */}
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder={`Search ${selectedCategory} on EcoShop`}
+            className="flex-grow h-full bg-gray-200 p-2 text-black focus:outline-none focus:ring-2 focus:ring-[#ff6f7e] focus:border-transparent text-base"
+          />
+
+          {/* Search Button */}
+          <button
+            className="bg-[#ff6f7e] hover:bg-[#ff8591] text-black h-full w-12 rounded-r-md flex items-center justify-center transition duration-150"
+            onClick={() => console.log(`Searching for: ${searchTerm} in ${selectedCategory}`)}
+          >
+            <Search size={24} strokeWidth={2.5} />
+          </button>
+        </div>
+        
+        {/* 4. Right-Side Links */}
+        <div className="flex items-center space-x-2 ml-auto flex-grow justify-evenly sm:flex-grow-0">
+          
+          {/* Language Selector (Hidden on small screens) */}
+          <div className="hidden md:flex items-center h-full border border-transparent hover:border-white cursor-pointer p-1">
+            {/* Flag Placeholder - Use a small icon or text here */}
+            <span className="text-sm font-bold mr-1">🇨🇦</span>
+            <span className="text-sm font-bold">EN</span>
+            <ChevronDown size={14} className="ml-0.5" />
+          </div>
+
+          {/* Account & Lists */}
+          <NavLink
+            topText="Hello, Sign In"
+            bottomText="Account & Lists"
+            icon={User}
+            isDropdown={true}
+          />
+
+          {/* Returns & Orders (Hidden on small screens) */}
+          <div className="hidden lg:block">
+            <NavLink
+              topText="Returns"
+              bottomText="& Orders"
+              icon={Repeat2}
+            />
+          </div>
+
+          {/* Shopping Cart */}
+          <NavLink
+            topText="" // Top text is usually hidden or small for cart
+            bottomText="Cart"
+            icon={ShoppingCart}
+          />
+
+          {/* Mobile Search/Menu Button (Shown on small screens) */}
+          <button className="md:hidden p-2 text-white">
+            <Menu size={24} />
+          </button>
+        </div>
+      </div>
+      
+      {/* Bottom Bar Section (For category links or quick access, often green/teal in Amazon) */}
+      <div className="bg-[#0f3d3b] gap-3 h-8 flex items-center text-white px-2 text-sm space-x-4 overflow-x-auto whitespace-nowrap font-inter shadow-md">
+        <Menu size={20} className="mr-1 cursor-pointer hover:text-gray-300" />
+        <a href="#" className="border border-transparent hover:border-white cursor-pointer p-1">All</a>
+        <a href="#" className="border border-transparent hover:border-white cursor-pointer p-1">Prime</a>
+        <a href="#" className="border border-transparent hover:border-white cursor-pointer p-1">Today's Deals</a>
+        <a href="#" className="border border-transparent hover:border-white cursor-pointer p-1">Customer Service</a>
+        <a href="#" className="border border-transparent hover:border-white cursor-pointer p-1 hidden sm:inline">Registry</a>
+        <a href="#" className="border border-transparent hover:border-white cursor-pointer p-1 hidden sm:inline">Gift Cards</a>
+      </div>
+    </div>
+  );
+};
+
+export default Navbar;
