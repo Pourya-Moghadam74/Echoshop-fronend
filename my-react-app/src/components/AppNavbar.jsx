@@ -1,10 +1,10 @@
 import { Search, ShoppingCart, MapPin, ChevronDown, Menu, User, Repeat2, LogOut } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchCategories } from '../features/category/categorySlice';
 import LoginPage from '../features/auth/LoginPage.jsx';
-import LogoutPage from '../features/auth/LogoutPage.jsx';
+import { useCartSync } from '../hooks/useCartSync.js';
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ const Navbar = () => {
       openAccount();
     }
   };
-
+  useCartSync();
   const closeAccount = () => setShowAccount(false);
   const { user, isAuthenticated } = useSelector((state) => state.auth);
 
