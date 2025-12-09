@@ -21,17 +21,17 @@ export default function RouterConfig() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        {/* <Route path="/shop" element={<ShopPage />} />
+        <Route path="/shop" element={<ShopPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/logout" element={<LogoutPage />} />
-        <Route path="/account" element={<AccountLayout />}>
+        {/* <Route path="/account" element={<AccountLayout />}>
           <Route index element={<AccountPage />} />           
-          <Route path="profile" element={<AccountProfilePage />} />   */}
-          {/* <Route path="orders" element={<OrdersPage />} />     
+          <Route path="profile" element={<AccountProfilePage />} />  
+          <Route path="orders" element={<OrdersPage />} />     
           <Route path="addresses" element={<AddressesPage />} /> 
-          <Route path="settings" element={<SettingsPage />} />  */}
-        {/* </Route> */}
+          <Route path="settings" element={<SettingsPage />} /> 
+        </Route> */}
       </Routes>
     </BrowserRouter>
   );

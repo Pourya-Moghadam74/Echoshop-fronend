@@ -28,6 +28,7 @@ export default function FeaturedProductGrid() {
     fetchProducts();
   }, []);
 
+  
   if (loading) {
     return (
       <div className="flex justify-center py-8 text-sm text-slate-600">
@@ -59,7 +60,7 @@ export default function FeaturedProductGrid() {
   }
 
   return (
-    <div className="flex justify-center py-4">
+    <div className="flex justify-center py-4 mb-4">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         {products.slice(0, 4).map((product) => (
           <div key={product.id} className="h-[360px] w-[220px]">

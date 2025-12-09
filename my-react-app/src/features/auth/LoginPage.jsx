@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { Form, Button, Alert, Stack } from 'react-bootstrap';
 import axios from 'axios';
-import { loginSuccess, setLoading } from "../auth/authSlice";
 import { useSelector, useDispatch } from 'react-redux';
-import { loadCart } from "../cart/cartSlice";
+import { loginSuccess, setLoading } from '../auth/authSlice';
+import { loadCart } from '../cart/cartSlice';
 
-const LOGIN_URL = 'http://localhost:8000/api/token/'; 
+const LOGIN_URL = 'http://localhost:8000/api/token/';
 
-export default function LoginPage() {
+export default function LoginPage({ onSuccess = () => {} }) {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const loading = useSelector((state) => state.auth.loading);
   const [error, setError] = useState(null);
@@ -25,32 +24,24 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const response = await axios.post(
-        LOGIN_URL, 
-        formData, 
-        { withCredentials: true }
-      );
-      try {
-        dispatch(loginSuccess({ 
+      const response = await axios.post(LOGIN_URL, formData, { withCredentials: true });
+      dispatch(
+        loginSuccess({
           access: response.data.access,
           refresh: response.data.refresh,
-          user: formData.username
-         }));
-      } catch (e) {
-        console.error("Reducer error:", e);
-      }
+          user: formData.username,
+        })
+      );
 
       if (response.status === 200 && response.data.access) {
-        // Load cart from backend after successful login
         dispatch(loadCart()).catch((cartError) => {
-          console.error("Error loading cart after login:", cartError);
-          // Continue with login even if cart loading fails
+          console.error('Error loading cart after login:', cartError);
         });
-
-        navigate('/'); // Redirect to homepage
+        onSuccess(); 
+        navigate('/');
       }
     } catch (err) {
-      const errorMessage = err.response?.data?.detail || "Invalid username or password.";
+      const errorMessage = err.response?.data?.detail || 'Invalid username or password.';
       setError(errorMessage);
     } finally {
       dispatch(setLoading(false));
@@ -58,41 +49,63 @@ export default function LoginPage() {
   };
 
   return (
-    <Stack 
-      gap={1} 
-      className="mx-auto" 
-      style={{ maxWidth: '300px', width: '100%' }}
-    >
-      <div className='m-1'>
-        <h2 className="text-center mb-4">Log In</h2>
-      </div>
-      <div>
-          {error && (<Alert variant="danger" className="mb-3">Login failed: {error}</Alert>)}
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="formUsername">
-              <Form.Label>Username</Form.Label>
-              <Form.Control type="text" name="username" value={formData.username} onChange={handleChange} required />
-            </Form.Group>
-            <Form.Group className="mb-4" controlId="formPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" name="password" value={formData.password} onChange={handleChange} required />
-            </Form.Group>
-            <Button variant="primary" type="submit" className="w-100" disabled={loading}
-              style={{
-                backgroundColor: "#FFD60A",
-                color: "#000",
-                border: "1px solid #000",
-                fontWeight: "450"
-              }}
-            >
-              {loading ? 'Logging In...' : 'Log In'}
-            </Button>
-            <p className="text-center text-muted small mt-3">
-              Don't have an account? <a href="/signup">Sign Up Here</a>
-            </p>
-          </Form>
-        </div>
-    </Stack>
+    <div className="flex min-h-screen items-start justify-center bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
+      <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-lg">
+        <h2 className="mb-4 text-center text-2xl font-semibold text-slate-900">Log In</h2>
 
+        {error && (
+          <div className="mb-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            Login failed: {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-1">
+            <label htmlFor="formUsername" className="text-sm font-medium text-slate-700">
+              Username
+            </label>
+            <input
+              id="formUsername"
+              name="username"
+              type="text"
+              value={formData.username}
+              onChange={handleChange}
+              required
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label htmlFor="formPassword" className="text-sm font-medium text-slate-700">
+              Password
+            </label>
+            <input
+              id="formPassword"
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-lg border border-black bg-amber-400 px-4 py-2 text-sm font-semibold text-black transition hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-70"
+          >
+            {loading ? 'Logging In...' : 'Log In'}
+          </button>
+        </form>
+
+        <p className="mt-4 text-center text-xs text-slate-500">
+          Don&apos;t have an account?{' '}
+          <a href="/signup" className="font-semibold text-slate-900 hover:underline">
+            Sign Up Here
+          </a>
+        </p>
+      </div>
+    </div>
   );
-};
+}

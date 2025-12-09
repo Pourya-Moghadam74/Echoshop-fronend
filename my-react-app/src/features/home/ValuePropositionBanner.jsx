@@ -9,7 +9,7 @@ const PROPS = [
 
 export default function ValuePropositionBanner() {
   return (
-    <div className="bg-gray-100 py-10">
+    <div className="bg-gray-100 py-10 flex-grow">
       <div className="mx-auto max-w-6xl px-4">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {PROPS.map((prop, index) => (

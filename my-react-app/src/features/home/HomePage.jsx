@@ -8,13 +8,13 @@ import { useSelector } from 'react-redux';
 
 export default function HomePage() {
     return (
-        <div className="flex flex-col min-h-screen font-serif bg-gray-200">
+        <div className="flex flex-col min-h-screen bg-gray-200">
 
-            <div>
+            <div className="sticky top-0 z-50">
                 <AppNavbar />
             </div>
 
-            <div className="w-[1024px] mx-auto bg-gray-100">
+            <div className="w-[1024px] xl:w-[1600px] mx-auto bg-gray-100 flex flex-col">
                 <div>
                     <HeroBanner />
                 </div>
