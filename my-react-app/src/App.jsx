@@ -10,8 +10,9 @@ import ShopPage from './features/shop/ShopPage.jsx';
 import LogoutPage from './features/auth/LogoutPage.jsx';
 import AccountLayout from './features/account/AccountLayout.jsx';
 import AccountPage from './features/account/AccountPage.jsx';
-import AccountProfilePage from './features/account/AccountProfilePage.jsx';  
+import AddressPage from './features/account/AddressPage.jsx'; 
 import CartPage from './features/cart/CartPage.jsx';
+
 
 export default function RouterConfig() {
   return (
@@ -27,7 +28,8 @@ export default function RouterConfig() {
         <Route path="/logout" element={<LogoutPage />} />
         <Route path='/cart' element={<CartPage />} />
         <Route path="/account" element={<AccountLayout />}>
-          <Route index element={<AccountPage />} />           
+          <Route index element={<AccountPage />} />
+          <Route path="addresses" element={<AddressPage />} />           
           {/* <Route path="profile" element={<AccountProfilePage />} />  
           <Route path="orders" element={<OrdersPage />} />     
           <Route path="addresses" element={<AddressesPage />} /> 
