@@ -1,10 +1,11 @@
 import { Search, ShoppingCart, MapPin, ChevronDown, Menu, User, Repeat2, LogOut } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchCategories } from '../features/category/categorySlice';
 import LoginPage from '../features/auth/LoginPage.jsx';
 import { useCartSync } from '../hooks/useCartSync.js';
+import { useAddressesSync } from '../hooks/useAddressesSync.js';
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -14,6 +15,15 @@ const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [showAccount, setShowAccount] = useState(false);
+  const addresses = useSelector((state) =>  state.user.addresses.results )
+  const userInfo = addresses !== undefined ? addresses[0] : {
+    full_name: "Guest",
+    street_address: "",
+    city: "",
+    state: "",
+    postal_code: "",
+    country: "",
+  };
   const openAccount = () => setShowAccount(true);
   const handleAccountClick = () => {
     if (isAuthenticated) {
@@ -23,8 +33,10 @@ const Navbar = () => {
     }
   };
   useCartSync();
+  useAddressesSync();
   const closeAccount = () => setShowAccount(false);
   const { user, isAuthenticated } = useSelector((state) => state.auth);
+  // const {}
 
   useEffect(() => {
     if (!categories.length && !loading) {
@@ -49,15 +61,17 @@ const Navbar = () => {
     >
       {Icon && bottomText === 'Cart' ? (
         <>
+        <button onClick={() => {navigate('/cart')}}>
           <div className="relative">
-            <button onClick={() => {navigate('/cart')}}>
+            
             <Icon size={30} strokeWidth={1.5} />
             <span className="absolute -top-1 left-4 w-4 h-4 bg-red-500 text-xs font-bold rounded-full flex items-center justify-center text-black">
               {itemCount === undefined ? 0 : itemCount}
             </span>
-            </button>
+            
           </div>
           <span className="ml-1 text-base font-bold whitespace-nowrap">Cart</span>
+          </button>
         </>
       ) : (
         <>
@@ -100,7 +114,8 @@ const Navbar = () => {
 
       <div className="bg-[#124b45] flex justify-between gap-2 items-center h-[60px] px-2 text-white font-inter shadow-md">
         {/* Logo */}
-        <div className="flex items-center h-full border border-transparent p-1 mr-2">
+        <button onClick={() => navigate('/')} className="flex items-center">
+        <div className="flex items-center h-full border border-transparent p-1 mr-2 hover:border-slate-50 cursor-pointer">
           <svg className="h-6 w-auto" viewBox="0 0 100 30" fill="white">
             <rect x="0" y="0" width="100" height="30" fill="none" />
             <text x="50" y="20" fontSize="18" fontWeight="bold" fill="white" textAnchor="middle">
@@ -111,18 +126,20 @@ const Navbar = () => {
             </text>
           </svg>
         </div>
+        </button>
 
         {/* Deliver To */}
-        <div className="hidden lg:flex items-center gap-0.5">
-          <div className="flex">
-            <MapPin size={18} />
+        {( userInfo.full_name !== "Guest" ) && (
+          <div className="hidden lg:flex items-center gap-0.5">
+            <div className="flex">
+              <MapPin size={18} />
+            </div>
+            <div className="flex flex-col leading-none">
+              <p className="text-xs">Deliver to</p>
+              <p className="font-bold text-sm">{userInfo.city} {userInfo.postal_code}</p>
+            </div> 
           </div>
-          <div className="flex flex-col leading-none">
-            <p className="text-xs">Deliver to</p>
-            <p className="font-bold text-sm">Toronto M4Y</p>
-          </div>
-        </div>
-
+        )}
         {/* Search Bar */}
         <form onSubmit={handleSearchSubmit} className="flex-grow h-[40px] hidden md:flex mx-2">
           <div className="relative group">
@@ -158,27 +175,30 @@ const Navbar = () => {
 
         {/* Right Links */}
         <div className="flex items-center space-x-2 ml-auto flex-grow justify-evenly sm:flex-grow-0">
-          <div className="hidden md:flex items-center h-full border border-transparent hover:border-white cursor-pointer p-1">
+          {/* <div className="hidden md:flex items-center h-full border border-transparent hover:border-white cursor-pointer p-1">
             <span className="text-sm font-bold mr-1">🇨🇦</span>
             <span className="text-sm font-bold">EN</span>
             <ChevronDown size={14} className="ml-0.5" />
-          </div>
+          </div> */}
 
           {/* <NavLink topText="Hello, Sign In" bottomText="Account & Lists" icon={User} isDropdown /> */}
         <button
           onClick={handleAccountClick}
           className="group flex flex-col justify-center h-full p-2 text-white border border-transparent hover:border-white cursor-pointer"
         >
-          <span className="text-xs leading-3 whitespace-nowrap">Hello {user}</span>
+          <span className="text-xs leading-3 whitespace-nowrap">Hello {userInfo.full_name}</span>
           <span className="font-bold text-sm whitespace-nowrap flex items-center">
             {isAuthenticated ? "Sing Out" : "Sign In"} <ChevronDown size={14} className="ml-0.5" />
           </span>
         </button>
 
+        <button onClick={() => {
+          isAuthenticated ? navigate('/account') : navigate('/login')
+        }}>
           <div className="hidden lg:block">
             <NavLink topText="Returns" bottomText="& Orders" icon={Repeat2} />
           </div>
-
+        </button>
           <NavLink topText="" bottomText="Cart" icon={ShoppingCart} />
 
           <button className="md:hidden p-2 text-white">

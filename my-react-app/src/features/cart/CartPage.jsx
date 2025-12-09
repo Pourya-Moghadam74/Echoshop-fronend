@@ -81,7 +81,9 @@ export default function CartPage() {
 
   return (
     <div>
-        <Appnavbar />
+        <div className='sticky top-0 z-50'>
+            <Appnavbar />
+        </div>
     <div className="min-h-screen bg-slate-50 px-4 py-10">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 lg:flex-row">
         {/* Items */}

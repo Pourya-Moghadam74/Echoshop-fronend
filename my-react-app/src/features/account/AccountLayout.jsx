@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import AccountSidebar from "../../components/AccountSidebar";
+// import AccountSidebar from "../../components/AccountSidebar";
 import AppNavbar from "../../components/AppNavbar";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -13,14 +13,16 @@ export default function AccountLayout() {
 
   return (
     <>
-    <AppNavbar />
+    <div className="sticky top-0 z-50">
+      <AppNavbar />   
+    </div>
     
-    <div style={{ display: "flex" }}>
-      
-      <div style={{ width: 250 }}>
+    
+    <div >
+      {/* <div style={{ width: 250 }}>
             <AccountSidebar />
-      </div>
-      <div style={{ flex: 1, padding: "32px" }}>
+      </div> */}
+      <div >
         <Outlet />
       </div>
     </div>
