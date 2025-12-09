@@ -19,7 +19,7 @@ const Navbar = () => {
     if (isAuthenticated) {
       navigate('/logout')
     } else {
-      openAccount();
+      navigate('/login');
     }
   };
   useCartSync();
@@ -50,10 +50,12 @@ const Navbar = () => {
       {Icon && bottomText === 'Cart' ? (
         <>
           <div className="relative">
+            <button onClick={() => {navigate('/cart')}}>
             <Icon size={30} strokeWidth={1.5} />
             <span className="absolute -top-1 left-4 w-4 h-4 bg-red-500 text-xs font-bold rounded-full flex items-center justify-center text-black">
               {itemCount === undefined ? 0 : itemCount}
             </span>
+            </button>
           </div>
           <span className="ml-1 text-base font-bold whitespace-nowrap">Cart</span>
         </>

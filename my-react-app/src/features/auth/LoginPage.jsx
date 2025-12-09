@@ -49,8 +49,8 @@ export default function LoginPage({ onSuccess = () => {} }) {
   };
 
   return (
-    <div className="flex min-h-screen items-start justify-center bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
-      <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-lg">
+    <div className="flex h-screen items-center justify-center bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
+      <div className="w-full max-w-lg h-2/5 rounded-2xl p-6 shadow-lg bg-white flex flex-col gap-5 justify-center">
         <h2 className="mb-4 text-center text-2xl font-semibold text-slate-900">Log In</h2>
 
         {error && (
@@ -93,7 +93,7 @@ export default function LoginPage({ onSuccess = () => {} }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg border border-black bg-amber-400 px-4 py-2 text-sm font-semibold text-black transition hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-70"
+            className="w-full rounded-lg border border-black bg-slate-900 px-4 py-2 text-sm font-semibold text-black transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-70 text-white"
           >
             {loading ? 'Logging In...' : 'Log In'}
           </button>
