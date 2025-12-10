@@ -6,6 +6,7 @@ import { createUserAddresses } from '../user/userService';
 
 const blankAddress = {
     id: null,
+    label: "",
     full_name: "",
     street_address: "",
     city: "",
@@ -21,6 +22,20 @@ export default function AddressPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [form, setForm] = useState(blankAddress);
   const [submitting, setSubmitting] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const deleteHandler = async (e) => {
+    e.preventDefault();
+    setDeleting(true);
+    try {
+      await dispatch(updateUserAddresses({ id: form.id, delete: true })).unwrap(); // ensure this thunk exists
+      closeDrawer();
+    } catch (err) {
+      console.error('Delete user info failed', err);
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   useEffect(() => {
     dispatch(fetchUserAddresses()).catch((err) => console.error('Fetch addresses failed', err));
@@ -62,7 +77,7 @@ export default function AddressPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-8">
+    <div className="bg-slate-50 px-4 py-8">
       <div className="mx-auto max-w-5xl space-y-4">
         <div className="flex items-center justify-between">
           <div>
@@ -126,6 +141,15 @@ export default function AddressPage() {
               </button>
             </div>
             <form onSubmit={handleSubmit} className="space-y-3 px-4 py-4">
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-slate-700">Label</label>
+                <input
+                  name="label"
+                  value={form.label}
+                  onChange={handleChange}
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-slate-400 focus:outline-none"
+                />
+              </div>
               <div className="space-y-1">
                 <label className="text-sm font-medium text-slate-700">Full Name</label>
                 <input
@@ -193,6 +217,14 @@ export default function AddressPage() {
                 className="w-full rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 disabled:opacity-70"
               >
                 {submitting ? 'Saving...' : form.id ? 'Save Changes' : 'Add Address'}
+              </button>
+              <button
+              type="button"
+                onClick={deleteHandler}
+                disabled={deleting}
+                className="w-full rounded-lg bg-red-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 disabled:opacity-70"
+              >
+                {deleting ? 'Deleting...' : 'Delete'}
               </button>
             </form>
           </div>

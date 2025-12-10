@@ -13,6 +13,17 @@ export const fetchUserInfo = async () => {
     }
 };
 
+export const updateUserInfo = async (userData) => {
+    try {
+        const response = await axiosInstance.patch(`me/`, userData);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating user addresses:', error);
+        throw error;
+    }
+};
+
+
 export const fetchUserAddresses = async () => { // Renamed for clarity
     try {
         // Fetches the address list API response
@@ -44,9 +55,12 @@ export const createUserAddresses = async (addressData) => {
 export const updateUserAddresses = async (addressData) => {
     try {
         const { id, ...address } = addressData;
-        console.log('Updating address with data:', address);
+        if (addressData.delete) {
+            const response = await axiosInstance.delete(`addresses/${id}/`);
+            return response.data;
+        } else {
         const response = await axiosInstance.put(`addresses/${id}/`, address);
-        return response.data;
+        return response.data;}
     } catch (error) {
         console.error('Error updating user addresses:', error);
         throw error;

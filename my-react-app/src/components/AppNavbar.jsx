@@ -132,7 +132,7 @@ const Navbar = () => {
         </button>
 
         {/* Deliver To */}
-        {( userInfo.full_name !== "Guest" ) && (
+        {( userInfo !== undefined ) && (
           <div className="hidden lg:flex items-center gap-0.5">
             <div className="flex">
               <MapPin size={18} />
@@ -189,7 +189,7 @@ const Navbar = () => {
           onClick={handleAccountClick}
           className="group flex flex-col justify-center h-full p-2 text-white border border-transparent hover:border-white cursor-pointer"
         >
-          <span className="text-xs leading-3 whitespace-nowrap">Hello {userInfoState.first_name}</span>
+          <span className="text-xs leading-3 whitespace-nowrap">Hello {userInfoState === null ? "Guest" : userInfoState.first_name}</span>
           <span className="font-bold text-sm whitespace-nowrap flex items-center">
             {isAuthenticated ? "Sing Out" : "Sign In"} <ChevronDown size={14} className="ml-0.5" />
           </span>

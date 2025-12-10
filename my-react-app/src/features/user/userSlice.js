@@ -34,6 +34,17 @@ export const fetchUserInfo = createAsyncThunk(
     }
 );
 
+export const updateUserInfo = createAsyncThunk(
+    'user/updateUserInfo',
+    async (userData, { rejectWithValue }) => {
+        try {
+            return await userService.updateUserInfo(userData);
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
 const userSlice = createSlice({
     name: 'user',
     initialState: {
@@ -66,7 +77,12 @@ const userSlice = createSlice({
             .addCase(fetchUserInfo.rejected, (state, action) => {
                 state.error = action.payload;
             })
-
+            .addCase(updateUserInfo.fulfilled, (state, action) => {
+                state.userInfo = action.payload;
+            })
+            .addCase(updateUserInfo.rejected, (state, action) => {
+                state.error = action.payload;
+            });
     }
 });
 

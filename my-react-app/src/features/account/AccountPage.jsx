@@ -1,34 +1,73 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateUserInfo } from '../user/userSlice'
 
 export default function AccountPage() {
-  // replace with selectors/queries
-  const userAddress = useSelector((state) =>  state.user.addresses.results)
-  const userInfo = useSelector((state) =>  state.user.userInfo)
+  const userAddress = useSelector((state) => state.user.addresses?.results || []);
+  const userInfo = useSelector((state) => state.user.userInfo) || {};
+  const dispatch = useDispatch();
+
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [form, setForm] = useState({
+    first_name: userInfo.first_name || '',
+    last_name: userInfo.last_name || '',
+    email: userInfo.email || '',
+  });
+  const [saving, setSaving] = useState(false);
+
   const orders = [
     { id: 'A123', date: '2025-01-04', total: 128.4, status: 'Shipped' },
     { id: 'A122', date: '2024-12-12', total: 89.9, status: 'Delivered' },
   ];
 
+  const openDrawer = () => {
+    setForm({
+      first_name: userInfo.first_name || '',
+      last_name: userInfo.last_name || '',
+      email: userInfo.email || '',
+    });
+    setDrawerOpen(true);
+  };
+
+  const closeDrawer = () => setDrawerOpen(false);
+
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      await dispatch(updateUserInfo(form)).unwrap(); // ensure this thunk exists
+      closeDrawer();
+    } catch (err) {
+      console.error('Update user info failed', err);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
-    <div className="flex-grow bg-slate-50 px-4 py-8">
+    <div className="flex-grow bg-slate-50 px-4 py-8 relative">
       <div className="mx-auto max-w-6xl space-y-6">
         {/* Header */}
         <div className="rounded-2xl bg-white p-6 shadow-sm">
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
             <div>
               <p className="text-sm text-slate-500">Welcome back</p>
-              <h1 className="text-2xl font-semibold text-slate-900">{userInfo.first_name} {userInfo.last_name}</h1>
-              {/* <p className="text-sm text-slate-600">{user.email} · Member since {user.memberSince}</p> */}
+              <h1 className="text-2xl font-semibold text-slate-900">
+                {userInfo.first_name || ''} {userInfo.last_name || ''}
+              </h1>
+              <p className="text-sm text-slate-600">Member since {new Date(userInfo.date_joined).toLocaleDateString()}</p>
+              <p className="text-sm text-slate-600">{userInfo.email || ''}</p>
             </div>
             <div className="flex gap-2">
-              <Link
-                to="/account/profile"
+              <button
+                onClick={openDrawer}
                 className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-100"
               >
                 Edit Profile
-              </Link>
+              </button>
               <Link
                 to="/logout"
                 className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
@@ -67,10 +106,10 @@ export default function AccountPage() {
             <div className="mt-4 space-y-4">
               {userAddress.map((addr) => (
                 <div key={addr.id} className="rounded-xl border border-slate-200 p-3">
-                  <p className="text-sm font-semibold text-slate-900">Home</p>
-                  <p className="text-sm text-slate-600">Primary</p>
+                  <p className="text-sm font-semibold text-slate-900">{addr.label}</p>
+                  <p className="text-sm text-slate-600">{addr.street_address}</p>
                   <p className="text-sm text-slate-600">
-                    {addr.street_address}, {addr.city} {addr.state_province} {addr.postal_code}, {addr.country}
+                    {addr.city} {addr.state_province} {addr.postal_code}, {addr.country}
                   </p>
                 </div>
               ))}
@@ -116,6 +155,63 @@ export default function AccountPage() {
           </div>
         </div>
       </div>
+
+      {drawerOpen && (
+        <div className="fixed inset-0 z-50 flex">
+          <div className="absolute inset-0 bg-black/40" onClick={closeDrawer} />
+          <div className="relative ml-auto h-full w-full max-w-md bg-white shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
+              <h2 className="text-lg font-semibold text-slate-900">Edit Profile</h2>
+              <button
+                onClick={closeDrawer}
+                className="rounded-md px-2 py-1 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+              >
+                Close
+              </button>
+            </div>
+            <form onSubmit={handleSubmit} className="space-y-3 px-4 py-4">
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-slate-700">First Name</label>
+                <input
+                  name="first_name"
+                  value={form.first_name}
+                  onChange={handleChange}
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-slate-400 focus:outline-none"
+                  required
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-slate-700">Last Name</label>
+                <input
+                  name="last_name"
+                  value={form.last_name}
+                  onChange={handleChange}
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-slate-400 focus:outline-none"
+                  required
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-slate-700">Email</label>
+                <input
+                  name="email"
+                  type="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-slate-400 focus:outline-none"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={saving}
+                className="w-full rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 disabled:opacity-70"
+              >
+                {saving ? 'Saving...' : 'Save Changes'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
