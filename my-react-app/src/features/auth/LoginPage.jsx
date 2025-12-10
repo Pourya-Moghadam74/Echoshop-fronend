@@ -89,6 +89,11 @@ export default function LoginPage({ onSuccess = () => {} }) {
               required
               className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none"
             />
+            <div className="text-right">
+              <a href="/forgot-password" className="text-xs font-semibold text-slate-700 hover:underline">
+                Forgot password?
+              </a>
+            </div>
           </div>
 
           <button

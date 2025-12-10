@@ -132,7 +132,7 @@ const Navbar = () => {
         </button>
 
         {/* Deliver To */}
-        {( userInfo !== undefined ) && (
+        {( userInfoState !== null ) && (
           <div className="hidden lg:flex items-center gap-0.5">
             <div className="flex">
               <MapPin size={18} />
