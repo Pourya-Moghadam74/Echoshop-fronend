@@ -168,13 +168,16 @@ export default function ShopPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <AppNavbar />
+      <div className='sticky top-0 z-50'>
+        <AppNavbar />
+      </div>
+      
       <div className="flex-1">
         <div className="mx-auto max-w-6xl px-4 py-6">
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
             {/* Sidebar Filters */}
             <aside className="lg:col-span-1">
-              <div className="sticky top-20 rounded-xl border border-slate-200 bg-white shadow-sm">
+              <div className="sticky top-28 rounded-xl border border-slate-200 bg-white shadow-sm">
                 <div className="rounded-t-xl border-b border-slate-200 bg-slate-900 px-4 py-3 text-white">
                   <h5 className="text-base font-semibold">Filters</h5>
                 </div>

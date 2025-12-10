@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { addToCart, removeFromCart, updateQuantity, clearCart } from './cartSlice';
 import axiosInstance from '../../api/axiosInstance'; // add this import
 import Appnavbar from '../../components/AppNavbar';
+import SiteFooter from '../../components/SiteFooter';
 
 export default function CartPage() {
   const { items, itemCount, subtotal } = useSelector((state) => state.cart);
@@ -80,11 +81,11 @@ export default function CartPage() {
   }
 
   return (
-    <div>
+    <div className='min-h-screen flex flex-col'>
         <div className='sticky top-0 z-50'>
             <Appnavbar />
         </div>
-    <div className="min-h-screen bg-slate-50 px-4 py-10">
+    <div className="bg-slate-50 px-4 py-10 flex-grow">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 lg:flex-row">
         {/* Items */}
         <div className="flex-1 rounded-2xl bg-white p-6 shadow-lg">
@@ -177,6 +178,9 @@ export default function CartPage() {
           </p>
         </aside>
       </div>
+    </div>
+    <div>
+      <SiteFooter />
     </div>
     </div>
   );

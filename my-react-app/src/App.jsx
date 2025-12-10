@@ -10,6 +10,7 @@ import ShopPage from './features/shop/ShopPage.jsx';
 import LogoutPage from './features/auth/LogoutPage.jsx';
 import ForgotPasswordPage from './features/auth/ForgotPasswordPage.jsx';
 import PasswordConfirmPage from './features/auth/PasswordConfirmPage.jsx';
+import ProductPage from './features/product/ProductPage.jsx';
 import AccountLayout from './features/account/AccountLayout.jsx';
 import AccountPage from './features/account/AccountPage.jsx';
 import AddressPage from './features/account/AddressPage.jsx'; 
@@ -31,6 +32,7 @@ export default function RouterConfig() {
         <Route path="/password-confirm" element={<PasswordConfirmPage />} />
         <Route path="/logout" element={<LogoutPage />} />
         <Route path='/cart' element={<CartPage />} />
+        <Route path="/product/:id" element={<ProductPage />} />
         <Route path="/account" element={<AccountLayout />}>
           <Route index element={<AccountPage />} />
           <Route path="addresses" element={<AddressPage />} />
