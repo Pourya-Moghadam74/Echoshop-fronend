@@ -23,15 +23,28 @@ export const updateUserAddresses = createAsyncThunk(
     }
 );
 
+export const fetchUserInfo = createAsyncThunk(
+    'user/fetchUserInfo',
+    async (_, { rejectWithValue }) => {
+        try {
+            return await userService.fetchUserInfo();
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
 const userSlice = createSlice({
     name: 'user',
     initialState: {
+        userInfo: null,
         addresses: [],
     },
     reducers: {
         setAddresses: (state, action) => {
             state.addresses = action.payload;
         },
+        resetUserState: () => ({ userInfo: null, addresses: [], error: null })
     },
     extraReducers: (builder) => {
         builder
@@ -47,8 +60,15 @@ const userSlice = createSlice({
             .addCase(updateUserAddresses.rejected, (state, action) => {
                 state.error = action.payload;
             })
+            .addCase(fetchUserInfo.fulfilled, (state, action) => {
+                state.userInfo = action.payload;
+            })
+            .addCase(fetchUserInfo.rejected, (state, action) => {
+                state.error = action.payload;
+            })
+
     }
 });
 
-export const { setAddresses } = userSlice.actions; 
+export const { setAddresses, resetUserState } = userSlice.actions; 
 export default userSlice.reducer;

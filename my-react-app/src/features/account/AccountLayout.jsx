@@ -1,8 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
-// import AccountSidebar from "../../components/AccountSidebar";
 import AppNavbar from "../../components/AppNavbar";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import Sitefooter from "../../components/Sitefooter";
 
 export default function AccountLayout() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -12,20 +11,16 @@ export default function AccountLayout() {
   }
 
   return (
-    <>
-    <div className="sticky top-0 z-50">
-      <AppNavbar />   
-    </div>
-    
-    
-    <div >
-      {/* <div style={{ width: 250 }}>
-            <AccountSidebar />
-      </div> */}
-      <div >
+    <div className="min-h-screen flex flex-col">
+      <div className="sticky top-0 z-50">
+        <AppNavbar />
+      </div>
+
+      <div className="flex-1">
         <Outlet />
       </div>
+
+      <Sitefooter />
     </div>
-    </>
   );
 }

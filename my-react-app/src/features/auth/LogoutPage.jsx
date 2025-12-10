@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../auth/authSlice';
 import { clearCart } from '../cart/cartSlice';
+import { resetUserState } from '../user/userSlice';
 
 const LOGOUT_URL = 'http://localhost:8000/api/token/blacklist/';
 
@@ -29,6 +30,7 @@ export default function LogoutPage() {
       } finally {
         dispatch(logout());
         dispatch(clearCart());
+        dispatch(resetUserState());
         timer = setTimeout(() => navigate('/'), 1000);
       }
     };

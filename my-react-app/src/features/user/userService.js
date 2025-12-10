@@ -1,5 +1,18 @@
 import axiosInstance from '../../api/axiosInstance';
 
+export const fetchUserInfo = async () => {
+    try {
+        // Fetches the user info API response
+        const response = await axiosInstance.get('me/'); 
+        const userInfoData = response.data; // Renamed variable
+        // Returns the actual data object: { id, username, email, first_name, last_name }
+        return userInfoData;
+    } catch (error) {
+        console.error('Error fetching user info:', error);
+        throw error;
+    }
+};
+
 export const fetchUserAddresses = async () => { // Renamed for clarity
     try {
         // Fetches the address list API response

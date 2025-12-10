@@ -4,21 +4,22 @@ import { useSelector } from 'react-redux';
 
 export default function AccountPage() {
   // replace with selectors/queries
-  const userInfo = useSelector((state) =>  state.user.addresses.results)
+  const userAddress = useSelector((state) =>  state.user.addresses.results)
+  const userInfo = useSelector((state) =>  state.user.userInfo)
   const orders = [
     { id: 'A123', date: '2025-01-04', total: 128.4, status: 'Shipped' },
     { id: 'A122', date: '2024-12-12', total: 89.9, status: 'Delivered' },
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-8">
+    <div className="flex-grow bg-slate-50 px-4 py-8">
       <div className="mx-auto max-w-6xl space-y-6">
         {/* Header */}
         <div className="rounded-2xl bg-white p-6 shadow-sm">
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
             <div>
               <p className="text-sm text-slate-500">Welcome back</p>
-              <h1 className="text-2xl font-semibold text-slate-900">{userInfo[0].full_name}</h1>
+              <h1 className="text-2xl font-semibold text-slate-900">{userInfo.first_name} {userInfo.last_name}</h1>
               {/* <p className="text-sm text-slate-600">{user.email} · Member since {user.memberSince}</p> */}
             </div>
             <div className="flex gap-2">
@@ -64,7 +65,7 @@ export default function AccountPage() {
               </Link>
             </div>
             <div className="mt-4 space-y-4">
-              {userInfo.map((addr) => (
+              {userAddress.map((addr) => (
                 <div key={addr.id} className="rounded-xl border border-slate-200 p-3">
                   <p className="text-sm font-semibold text-slate-900">Home</p>
                   <p className="text-sm text-slate-600">Primary</p>
@@ -73,7 +74,7 @@ export default function AccountPage() {
                   </p>
                 </div>
               ))}
-              {!userInfo.length && (
+              {!userAddress.length && (
                 <p className="text-sm text-slate-500">No addresses yet. Add one to speed up checkout.</p>
               )}
             </div>

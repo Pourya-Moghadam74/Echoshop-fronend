@@ -6,6 +6,7 @@ import { fetchCategories } from '../features/category/categorySlice';
 import LoginPage from '../features/auth/LoginPage.jsx';
 import { useCartSync } from '../hooks/useCartSync.js';
 import { useAddressesSync } from '../hooks/useAddressesSync.js';
+import { useUserInfoSync } from '../hooks/useUserInfoSync.js';
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const Navbar = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [showAccount, setShowAccount] = useState(false);
   const addresses = useSelector((state) =>  state.user.addresses.results )
+  const userInfoState = useSelector((state) => state.user.userInfo )
   const userInfo = addresses !== undefined ? addresses[0] : {
     full_name: "Guest",
     street_address: "",
@@ -33,6 +35,7 @@ const Navbar = () => {
     }
   };
   useCartSync();
+  useUserInfoSync();
   useAddressesSync();
   const closeAccount = () => setShowAccount(false);
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -186,7 +189,7 @@ const Navbar = () => {
           onClick={handleAccountClick}
           className="group flex flex-col justify-center h-full p-2 text-white border border-transparent hover:border-white cursor-pointer"
         >
-          <span className="text-xs leading-3 whitespace-nowrap">Hello {userInfo.full_name}</span>
+          <span className="text-xs leading-3 whitespace-nowrap">Hello {userInfoState.first_name}</span>
           <span className="font-bold text-sm whitespace-nowrap flex items-center">
             {isAuthenticated ? "Sing Out" : "Sign In"} <ChevronDown size={14} className="ml-0.5" />
           </span>
@@ -196,7 +199,7 @@ const Navbar = () => {
           isAuthenticated ? navigate('/account') : navigate('/login')
         }}>
           <div className="hidden lg:block">
-            <NavLink topText="Returns" bottomText="& Orders" icon={Repeat2} />
+            <NavLink topText="Account" bottomText="& Orders" icon={Repeat2} />
           </div>
         </button>
           <NavLink topText="" bottomText="Cart" icon={ShoppingCart} />

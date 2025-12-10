@@ -38,7 +38,7 @@ export default function LoginPage({ onSuccess = () => {} }) {
         dispatch(loadCart()).catch((cartError) => {
           console.error('Error loading cart after login:', cartError);
         });
-        onSuccess(); 
+        onSuccess();
         navigate('/');
       }
     } catch (err) {
