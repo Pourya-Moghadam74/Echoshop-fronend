@@ -11,6 +11,10 @@ import LogoutPage from './features/auth/LogoutPage.jsx';
 import ForgotPasswordPage from './features/auth/ForgotPasswordPage.jsx';
 import PasswordConfirmPage from './features/auth/PasswordConfirmPage.jsx';
 import ProductPage from './features/product/ProductPage.jsx';
+import ContactPage from './features/pages/ContactPage.jsx';
+import FAQPage from './features/pages/FAQPage.jsx';
+import TermsPage from './features/pages/TermsPage.jsx';
+import PrivacyPage from './features/pages/PrivacyPage.jsx';
 import AccountLayout from './features/account/AccountLayout.jsx';
 import AccountPage from './features/account/AccountPage.jsx';
 import AddressPage from './features/account/AddressPage.jsx'; 
@@ -33,6 +37,10 @@ export default function RouterConfig() {
         <Route path="/logout" element={<LogoutPage />} />
         <Route path='/cart' element={<CartPage />} />
         <Route path="/product/:id" element={<ProductPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/faq" element={<FAQPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/account" element={<AccountLayout />}>
           <Route index element={<AccountPage />} />
           <Route path="addresses" element={<AddressPage />} />
