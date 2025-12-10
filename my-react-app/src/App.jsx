@@ -9,6 +9,7 @@ import HomePage from './features/home/HomePage.jsx';
 import ShopPage from './features/shop/ShopPage.jsx';
 import LogoutPage from './features/auth/LogoutPage.jsx';
 import ForgotPasswordPage from './features/auth/ForgotPasswordPage.jsx';
+import PasswordConfirmPage from './features/auth/PasswordConfirmPage.jsx';
 import AccountLayout from './features/account/AccountLayout.jsx';
 import AccountPage from './features/account/AccountPage.jsx';
 import AddressPage from './features/account/AddressPage.jsx'; 
@@ -27,6 +28,7 @@ export default function RouterConfig() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/password-confirm" element={<PasswordConfirmPage />} />
         <Route path="/logout" element={<LogoutPage />} />
         <Route path='/cart' element={<CartPage />} />
         <Route path="/account" element={<AccountLayout />}>

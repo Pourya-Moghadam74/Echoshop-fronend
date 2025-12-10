@@ -1,30 +1,37 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState({ type: null, message: "", resetUrl: null });
+  const [status, setStatus] = useState({ type: null, message: "" });
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus({ type: null, message: "", resetUrl: null });
+    setStatus({ type: null, message: "" });
     setLoading(true);
 
     try {
       const res = await axiosInstance.post("auth/password/forgot/", { email });
-      setStatus({
-        type: "success",
-        message: res.data?.detail || "If an account exists, a reset link is below.",
-        resetUrl: res.data?.reset_url || null,
-      });
-      setEmail("");
+      const uid = res.data?.uid;
+      const token = res.data?.token;
+
+      if (uid && token) {
+        navigate("/password-confirm", { state: { uid, token, email } });
+      } else {
+        setStatus({
+          type: "error",
+          message: "We could not generate a reset link. Please try again.",
+        });
+      }
     } catch (err) {
       const message =
         err.response?.data?.detail ||
         err.response?.data?.error ||
         "We could not generate a reset link. Try again.";
-      setStatus({ type: "error", message, resetUrl: null });
+      setStatus({ type: "error", message });
     } finally {
       setLoading(false);
     }
@@ -78,9 +85,7 @@ export default function ForgotPasswordPage() {
                   : "border-rose-200 bg-rose-50 text-rose-700"
               }`}
             >
-              <p className="font-semibold">
-                {status.type === "success" ? "Link ready" : "Request failed"}
-              </p>
+              <p className="font-semibold">{status.type === "success" ? "Link ready" : "Request failed"}</p>
               <p>{status.message}</p>
             </div>
           )}
@@ -107,17 +112,6 @@ export default function ForgotPasswordPage() {
               {loading ? "Generating link..." : "Send reset link"}
             </button>
           </form>
-
-          {status.resetUrl && (
-            <div className="mt-6 space-y-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-4 text-sm text-slate-800">
-              <p className="text-sm font-semibold text-slate-900">Your reset link</p>
-              <p className="break-words text-xs text-slate-600">{status.resetUrl}</p>
-              <div className="flex flex-wrap gap-2 text-xs text-slate-500">
-                <span className="rounded-full bg-white px-3 py-1 font-semibold">Expires per token policy</span>
-                <span className="rounded-full bg-white px-3 py-1 font-semibold">One-time use</span>
-              </div>
-            </div>
-          )}
 
           <div className="mt-6 text-center text-sm text-slate-600">
             Remembered your password?{" "}
