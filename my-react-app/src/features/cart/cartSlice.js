@@ -159,7 +159,6 @@ const cartSlice = createSlice({
       })
       .addCase(syncCart.rejected, (state, action) => {
         state.error = action.payload;
-        console.log(action.payload)
         saveCart(state);
       });
   },

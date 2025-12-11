@@ -49,7 +49,7 @@ const userSlice = createSlice({
     name: 'user',
     initialState: {
         userInfo: null,
-        addresses: [],
+        addresses: { results: [] },
     },
     reducers: {
         setAddresses: (state, action) => {

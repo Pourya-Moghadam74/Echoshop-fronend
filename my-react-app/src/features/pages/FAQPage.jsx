@@ -26,9 +26,9 @@ const faqs = [
 
 export default function FAQPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 flex flex-col">
       <AppNavbar />
-      <main className="mx-auto max-w-6xl px-4 py-12 space-y-10">
+      <main className="mx-auto max-w-6xl px-4 py-12 space-y-10 flex-grow">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-10 text-white shadow-xl">
           <div className="absolute -left-12 -top-14 h-44 w-44 rounded-full bg-white/10 blur-3xl" />
           <div className="absolute -right-10 bottom-0 h-52 w-52 rounded-full bg-emerald-400/20 blur-3xl" />

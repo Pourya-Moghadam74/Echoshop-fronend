@@ -18,7 +18,8 @@ const Navbar = () => {
   const [showAccount, setShowAccount] = useState(false);
   const addresses = useSelector((state) =>  state.user.addresses.results )
   const userInfoState = useSelector((state) => state.user.userInfo )
-  const userInfo = addresses !== undefined ? addresses[0] : {
+  
+  const addressInfo = addresses.length !== 0 ? addresses[0] : {
     full_name: "Guest",
     street_address: "",
     city: "",
@@ -139,7 +140,7 @@ const Navbar = () => {
             </div>
             <div className="flex flex-col leading-none">
               <p className="text-xs">Deliver to</p>
-              <p className="font-bold text-sm">{userInfo.city} {userInfo.postal_code}</p>
+              <p className="font-bold text-sm">{addressInfo.city} {addressInfo.postal_code}</p>
             </div> 
           </div>
         )}

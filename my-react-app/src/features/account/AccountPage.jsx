@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateUserInfo } from '../user/userSlice'
+import { getUserOrders } from '../order/orderService'
 
 export default function AccountPage() {
   const userAddress = useSelector((state) => state.user.addresses?.results || []);
@@ -15,12 +16,30 @@ export default function AccountPage() {
     email: userInfo.email || '',
   });
   const [saving, setSaving] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const orders = [
-    { id: 'A123', date: '2025-01-04', total: 128.4, status: 'Shipped' },
-    { id: 'A122', date: '2024-12-12', total: 89.9, status: 'Delivered' },
-  ];
 
+  // const orders = [
+  //   { id: 'A123', date: '2025-01-04', total: 128.4, status: 'Shipped' },
+  //   { id: 'A122', date: '2024-12-12', total: 89.9, status: 'Delivered' },
+  // ];
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const data = await getUserOrders();
+        setOrders(data.results);
+      } catch (err) {
+        setError("Could not load orders");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
   const openDrawer = () => {
     setForm({
       first_name: userInfo.first_name || '',
@@ -135,7 +154,7 @@ export default function AccountPage() {
                     <p className="text-xs text-slate-500">Placed {order.date}</p>
                   </div>
                   <div className="flex items-center gap-4 text-sm">
-                    <span className="font-semibold text-slate-900">${order.total.toFixed(2)}</span>
+                    <span className="font-semibold text-slate-900">${order.total_amount}</span>
                     <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
                       {order.status}
                     </span>
