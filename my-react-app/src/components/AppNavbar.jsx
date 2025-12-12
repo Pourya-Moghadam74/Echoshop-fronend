@@ -11,11 +11,12 @@ import { useUserInfoSync } from '../hooks/useUserInfoSync.js';
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { categories, loading } = useSelector((state) => state.categories);
+  const { categories = [], loading } = useSelector((state) => state.categories || {});
   const { items, itemCount } = useSelector((state) => state.cart);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [showAccount, setShowAccount] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [drawerSide, setDrawerSide] = useState('right'); // 'right' for mobile icon, 'left' for bottom bar menu
   const addresses = useSelector((state) => state.user.addresses?.results || []);
   const userInfoState = useSelector((state) => state.user.userInfo )
   
@@ -91,31 +92,6 @@ const Navbar = () => {
 
   return (
     <div className="flex flex-col w-full">
-        {showAccount && (
-        <div className="fixed inset-0 z-50 flex">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/50"
-            onClick={closeAccount}
-            aria-hidden="true"
-          />
-          {/* Drawer */}
-          <div className="relative ml-auto h-full w-full max-w-md bg-white shadow-2xl transform transition translate-x-0">
-            <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3 bg-[#124b45]">
-              <h3 className="text-lg font-semibold text-white">Account</h3>
-              <button
-                onClick={closeAccount}
-                className="rounded-md px-2 py-1 text-sm font-medium text-white hover:bg-green-100 hover:text-black transition"
-              >
-                Close
-              </button>
-            </div>
-            <div className="overflow-y-auto px-4 py-4">
-              <LoginPage onSuccess={closeAccount}/> 
-            </div>
-          </div>
-        </div>
-      )}
 
       <div className="bg-[#124b45] flex justify-between gap-2 items-center h-[60px] px-2 text-white font-inter shadow-md">
         {/* Logo */}
@@ -207,14 +183,16 @@ const Navbar = () => {
           <NavLink topText="" bottomText="Cart" icon={ShoppingCart} />
 
           <button className="md:hidden p-2 text-white">
-            <Menu size={24} />
+            <Menu size={24} onClick={() => { setDrawerSide('right'); setShowMenu(true); }} />
           </button>
         </div>
       </div>
 
       {/* Bottom Bar */}
       <div className="bg-[#0f3d3b] gap-3 h-8 flex items-center text-white px-2 text-sm space-x-4 overflow-x-auto whitespace-nowrap font-inter shadow-md">
-        <Menu size={20} className="mr-1 cursor-pointer hover:text-gray-300" />
+        <button onClick={() => { setDrawerSide('left'); setShowMenu(true); }} className="mr-1 text-white hover:text-gray-300">
+          <Menu size={20} />
+        </button>
         <a href="#" className="border border-transparent hover:border-white cursor-pointer p-1">
           All
         </a>
@@ -234,6 +212,93 @@ const Navbar = () => {
           Gift Cards
         </a>
       </div>
+
+      {showMenu && (
+        <div className="fixed inset-0 z-50 flex">
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setShowMenu(false)}
+            aria-hidden="true"
+          />
+          <div className={`relative flex h-full w-full max-w-xs flex-col bg-white shadow-2xl ${drawerSide === 'right' ? 'ml-auto' : 'mr-auto'}`}>
+            <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3 bg-[#124b45] text-white">
+              <div>
+                <p className="text-xs">Hello</p>
+                <p className="text-sm font-semibold">
+                  {userInfoState?.first_name || userInfoState?.username || "Guest"}
+                </p>
+              </div>
+              <button
+                onClick={() => setShowMenu(false)}
+                className="rounded-md px-2 py-1 text-xs font-semibold hover:bg-white/10"
+              >
+                Close
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto">
+              <nav className="flex flex-col divide-y divide-slate-100">
+                <button
+                  onClick={() => {navigate('/shop'); setShowMenu(false);}}
+                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                >
+                  Shop
+                </button>
+                <button
+                  onClick={() => {navigate('/categories'); setShowMenu(false);}}
+                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                >
+                  Categories
+                </button>
+                <button
+                  onClick={() => {navigate('/cart'); setShowMenu(false);}}
+                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                >
+                  Cart ({itemCount || 0})
+                </button>
+                <button
+                  onClick={() => {navigate('/orders'); setShowMenu(false);}}
+                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                >
+                  Orders
+                </button>
+                <button
+                  onClick={() => {navigate('/account'); setShowMenu(false);}}
+                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                >
+                  Account
+                </button>
+                <button
+                  onClick={() => {navigate('/contact'); setShowMenu(false);}}
+                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                >
+                  Contact Us
+                </button>
+                <button
+                  onClick={() => {navigate('/faq'); setShowMenu(false);}}
+                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                >
+                  FAQ
+                </button>
+                {isAuthenticated ? (
+                  <button
+                    onClick={() => {navigate('/logout'); setShowMenu(false);}}
+                    className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                  >
+                    Sign Out
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {navigate('/login'); setShowMenu(false);}}
+                    className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                  >
+                    Sign In
+                  </button>
+                )}
+              </nav>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

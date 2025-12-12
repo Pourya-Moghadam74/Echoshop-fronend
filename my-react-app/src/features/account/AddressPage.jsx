@@ -20,6 +20,7 @@ export default function AddressPage() {
   const { results = [], error } = useSelector((state) => state.user.addresses || {});
   const addresses = results;
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const [form, setForm] = useState(blankAddress);
   const [submitting, setSubmitting] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -39,7 +40,7 @@ export default function AddressPage() {
 
   useEffect(() => {
     dispatch(fetchUserAddresses()).catch((err) => console.error('Fetch addresses failed', err));
-  }, [dispatch]);
+  }, [dispatch,]);
 
   const openNew = () => {
     setForm(blankAddress);
@@ -54,6 +55,7 @@ export default function AddressPage() {
   const closeDrawer = () => {
     setDrawerOpen(false);
     setForm(blankAddress);
+    setConfirmDelete(false);
   };
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -63,7 +65,8 @@ export default function AddressPage() {
     setSubmitting(true);
     try {
         if (form.id == null) {
-            createUserAddresses(form);
+            await createUserAddresses(form);
+            dispatch(fetchUserAddresses());
             } else {
       await dispatch(updateUserAddresses(form)).unwrap();
       dispatch(fetchUserAddresses());
@@ -73,6 +76,7 @@ export default function AddressPage() {
       console.error('Save address failed', err);
     } finally {
       setSubmitting(false);
+      setDrawerOpen(false)
     }
   };
 
@@ -126,10 +130,10 @@ export default function AddressPage() {
       </div>
 
       {drawerOpen && (
-        <div className="fixed inset-0 z-50 flex">
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
           <div className="absolute inset-0 bg-black/40" onClick={closeDrawer} />
-          <div className="relative ml-auto h-full w-full max-w-md bg-white shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
+          <div className="relative w-full max-w-lg rounded-2xl bg-white shadow-2xl">
+            <div className="flex items-center justify-between rounded-t-2xl border-b border-slate-200 px-4 py-3 bg-slate-50">
               <h2 className="text-lg font-semibold text-slate-900">
                 {form.id ? 'Edit Address' : 'Add Address'}
               </h2>
@@ -218,15 +222,42 @@ export default function AddressPage() {
               >
                 {submitting ? 'Saving...' : form.id ? 'Save Changes' : 'Add Address'}
               </button>
-              <button
-              type="button"
-                onClick={deleteHandler}
+              {form.id && <button
+                type="button"
+                onClick={() => setConfirmDelete(true)}
                 disabled={deleting}
-                className="w-full rounded-lg bg-red-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 disabled:opacity-70"
+                className="w-full rounded-lg bg-[#E84545] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-red-600 disabled:opacity-70"
+              >
+                {deleting ? 'Deleting...' : 'Delete'}
+              </button>}
+            </form>
+          </div>
+        </div>
+      )}
+
+      {confirmDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setConfirmDelete(false)} />
+          <div className="relative w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl">
+            <h3 className="text-lg font-semibold text-slate-900">Delete this address?</h3>
+            <p className="mt-2 text-sm text-slate-600">
+              This action cannot be undone. Are you sure you want to remove this address?
+            </p>
+            <div className="mt-4 flex items-center gap-2">
+              <button
+                onClick={() => setConfirmDelete(false)}
+                className="flex-1 rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={(e) => { setConfirmDelete(false); deleteHandler(e); }}
+                disabled={deleting}
+                className="flex-1 rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700 disabled:opacity-70"
               >
                 {deleting ? 'Deleting...' : 'Delete'}
               </button>
-            </form>
+            </div>
           </div>
         </div>
       )}

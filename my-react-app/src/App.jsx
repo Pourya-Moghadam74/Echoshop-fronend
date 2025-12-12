@@ -1,8 +1,6 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-// Removed all internal component logic and used imports instead
 
-// 1. Import components from their new /pages directory
+
 import LoginPage from "./features/auth/LoginPage.jsx";
 import SignUpPage from './features/auth/SignUpPage.jsx';
 import HomePage from './features/home/HomePage.jsx';
@@ -27,9 +25,6 @@ import SecurityPage from './features/account/SecurityPage.jsx';
 
 export default function RouterConfig() {
   return (
-    // <h1 class="text-3xl font-bold underline text-red-500">
-    //   Hello world!
-    // </h1>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -53,10 +48,6 @@ export default function RouterConfig() {
           <Route index element={<AccountPage />} />
           <Route path="addresses" element={<AddressPage />} />
           <Route path="security" element={<SecurityPage />} />           
-          {/* <Route path="profile" element={<AccountProfilePage />} />  
-          <Route path="orders" element={<OrdersPage />} />     
-          <Route path="addresses" element={<AddressesPage />} /> 
-          <Route path="settings" element={<SettingsPage />} />  */}
         </Route>
       </Routes>
     </BrowserRouter>
