@@ -17,6 +17,7 @@ import FAQPage from './features/pages/FAQPage.jsx';
 import TermsPage from './features/pages/TermsPage.jsx';
 import PrivacyPage from './features/pages/PrivacyPage.jsx';
 import OrdersPage from './features/order/OrdersPage.jsx';
+import OrderDetailPage from './features/order/OrderDetailPage.jsx';
 import AccountLayout from './features/account/AccountLayout.jsx';
 import AccountPage from './features/account/AccountPage.jsx';
 import AddressPage from './features/account/AddressPage.jsx'; 
@@ -47,6 +48,7 @@ export default function RouterConfig() {
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/orders" element={<OrdersPage />} />
+        <Route path="/orders/:id" element={<OrderDetailPage />} />
         <Route path="/account" element={<AccountLayout />}>
           <Route index element={<AccountPage />} />
           <Route path="addresses" element={<AddressPage />} />

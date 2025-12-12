@@ -16,17 +16,18 @@ const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [showAccount, setShowAccount] = useState(false);
-  const addresses = useSelector((state) =>  state.user.addresses.results )
+  const addresses = useSelector((state) => state.user.addresses?.results || []);
   const userInfoState = useSelector((state) => state.user.userInfo )
   
-  const addressInfo = addresses.length !== 0 ? addresses[0] : {
+  const addressInfo = addresses[0] || {
     full_name: "Guest",
     street_address: "",
     city: "",
-    state: "",
+    state_province: "",
     postal_code: "",
     country: "",
   };
+  
   const openAccount = () => setShowAccount(true);
   const handleAccountClick = () => {
     if (isAuthenticated) {
