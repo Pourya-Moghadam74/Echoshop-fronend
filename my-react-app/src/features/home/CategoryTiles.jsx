@@ -66,10 +66,10 @@ export default function CategoryTiles() {
           <Link
             key={category.id}
             to={`/shop?category=${category.slug}`}
-            className="block w-[300px] rounded shadow bg-white overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-orange-300"
+            className="block w-[250px] rounded shadow bg-white overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-orange-300"
           >
             <div
-              className="h-[360px] bg-gray-300 bg-cover bg-center flex items-end justify-center"
+              className="h-[310px] bg-gray-300 bg-cover bg-center flex items-end justify-center"
               style={{
                 backgroundImage: `url(/category-${category.id}-bg.jpg)`,
               }}
