@@ -6,7 +6,8 @@ import { logout } from '../auth/authSlice';
 import { clearCart } from '../cart/cartSlice';
 import { resetUserState } from '../user/userSlice';
 
-const LOGOUT_URL = 'http://localhost:8000/api/token/blacklist/';
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+const LOGOUT_URL = `${API_BASE}/api/token/blacklist/`;
 
 export default function LogoutPage() {
   const [statusMessage] = useState('Logging out...');

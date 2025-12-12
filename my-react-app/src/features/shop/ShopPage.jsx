@@ -7,7 +7,7 @@ import axiosInstance from '../../api/axiosInstance';
 
 export default function ShopPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const API_BASE = import.meta.env.VITE_API_BASE_URL;
   // State
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -321,7 +321,7 @@ export default function ShopPage() {
                         {products.map((product) => {
                           let imageUrl = product.image || null;
                           if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
-                            imageUrl = `http://localhost:8000${imageUrl}`;
+                            imageUrl = `${API_BASE}${imageUrl}`;
                           }
 
                           return (

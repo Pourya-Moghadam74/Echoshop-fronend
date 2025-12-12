@@ -12,7 +12,7 @@ export default function ProductPage() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const API_BASE = import.meta.env.VITE_API_BASE_URL;
   useEffect(() => {
     let active = true;
     const load = async () => {
@@ -37,13 +37,13 @@ export default function ProductPage() {
       active = false;
     };
   }, [id]);
-
+ 
   const imageUrl = useMemo(() => {
     if (!product?.image) return "/placeholder-card.jpg";
     if (product.image.startsWith("http") || product.image.startsWith("data:")) {
       return product.image;
     }
-    return `http://localhost:8000${product.image}`;
+    return `${API_BASE}${product.image}`;
   }, [product]);
 
   const handleAddToCart = () => {

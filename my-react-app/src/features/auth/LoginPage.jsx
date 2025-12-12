@@ -5,8 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { loginSuccess, setLoading } from '../auth/authSlice';
 import { loadCart } from '../cart/cartSlice';
 
-
-const LOGIN_URL = 'http://localhost:8000/api/token/';
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+const LOGIN_URL = `${API_BASE}/api/token/`;
 
 export default function LoginPage({ onSuccess = () => {} }) {
   const [formData, setFormData] = useState({ username: '', password: '' });

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8000/api/'; 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL; 
 const TOKEN_REFRESH_URL = `${BASE_URL}token/refresh/`;
 
 // 1. Create a custom Axios instance for all API calls
