@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [
         tailwindcss(),
-        react(),   // <-- REQUIRED for Tailwind v4
+        react(),
   ],
+  base: 'ecoshop'
 })
