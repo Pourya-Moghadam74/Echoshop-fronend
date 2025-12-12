@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 
 
 import LoginPage from "./features/auth/LoginPage.jsx";
@@ -25,7 +25,7 @@ import SecurityPage from './features/account/SecurityPage.jsx';
 
 export default function RouterConfig() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/shop" element={<ShopPage />} />
@@ -50,6 +50,6 @@ export default function RouterConfig() {
           <Route path="security" element={<SecurityPage />} />           
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
