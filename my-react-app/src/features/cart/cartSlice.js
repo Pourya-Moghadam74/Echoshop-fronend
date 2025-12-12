@@ -15,7 +15,7 @@ const saveCart = (state) => {
 // Helper function to calculate cart totals
 const calculateTotals = (items) => {
   return {
-    itemCount: items.length,
+    itemCount: items.reduce((count, item) => count + item.quantity, 0),
     subtotal: items.reduce((total, item) => total + (item.price * item.quantity), 0),
   };
 };
@@ -159,7 +159,6 @@ const cartSlice = createSlice({
       })
       .addCase(syncCart.rejected, (state, action) => {
         state.error = action.payload;
-        console.log(action.payload)
         saveCart(state);
       });
   },

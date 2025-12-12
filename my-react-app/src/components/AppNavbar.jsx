@@ -1,199 +1,306 @@
-import React from 'react';
-import { Navbar, Container, Nav, Button } from 'react-bootstrap';
-import Offcanvas from 'react-bootstrap/Offcanvas';
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
-import LoginPage from "../features/auth/LoginPage.jsx";
+import { Search, ShoppingCart, MapPin, ChevronDown, Menu, User, Repeat2, LogOut } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addToCart, removeFromCart, clearCart } from "../features/cart/cartSlice";
-import { useCartSync } from '../hooks/useCartSync';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { fetchCategories } from '../features/category/categorySlice';
+import LoginPage from '../features/auth/LoginPage.jsx';
+import { useCartSync } from '../hooks/useCartSync.js';
+import { useAddressesSync } from '../hooks/useAddressesSync.js';
+import { useUserInfoSync } from '../hooks/useUserInfoSync.js';
 
-export default function AppNavbar() {
-    // Check authentication status locally
-    const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
-    const [showLogin, setShowLogin] = useState(false);
-    const [showCart, setShowCart] = useState(false);
-    const handleCartShow = () => setShowCart(true);
-    const handleCartClose = () => setShowCart(false);
-    const handleShowLogin = () => setShowLogin(true);
-    const { itemCount, subtotal, items } = useSelector(state => state.cart); 
-    const dispatch = useDispatch();
-    const handleCloseLogin = () => { setShowLogin(false) }
+const Navbar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { categories = [], loading } = useSelector((state) => state.categories || {});
+  const { items, itemCount } = useSelector((state) => state.cart);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [showMenu, setShowMenu] = useState(false);
+  const [drawerSide, setDrawerSide] = useState('right'); // 'right' for mobile icon, 'left' for bottom bar menu
+  const addresses = useSelector((state) => state.user.addresses?.results || []);
+  const userInfoState = useSelector((state) => state.user.userInfo )
+  
+  const addressInfo = addresses[0] || {
+    full_name: "Guest",
+    street_address: "",
+    city: "",
+    state_province: "",
+    postal_code: "",
+    country: "",
+  };
+  
+  const openAccount = () => setShowAccount(true);
+  const handleAccountClick = () => {
+    if (isAuthenticated) {
+      navigate('/logout')
+    } else {
+      navigate('/login');
+    }
+  };
+  useCartSync();
+  useUserInfoSync();
+  useAddressesSync();
+  const closeAccount = () => setShowAccount(false);
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  // const {}
 
-    // Auto-sync cart to backend when authenticated (debounced)
-    useCartSync();
-    const handleRemoveFromCart = (id) => {
-        dispatch(removeFromCart(id));
-    };
+  useEffect(() => {
+    if (!categories.length && !loading) {
+      dispatch(fetchCategories());
+    }
+  }, [dispatch, categories.length, loading]);
 
-    const handleIncreaseQuantity = (item) => {
-        dispatch(addToCart({ ...item, quantity: 1 }));
-    };
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    const trimmed = searchTerm.trim();
+    if (trimmed) params.set('search', trimmed);
+    if (selectedCategory) params.set('category', selectedCategory); // category id
+    navigate(`/shop?${params.toString()}`);
+  };
 
-    const handleClearCart = () => {
-        dispatch(clearCart());
-    };
-    return (
-        <Navbar bg="dark" variant="dark" expand="lg" sticky="top">
-            <Container fluid>
-                
-                {/* 1. Logo/Brand */}
-                <Navbar.Brand as={Link} to="/" className="fw-bold fs-4 text-warning">
-                    E-Commerce Store
-                </Navbar.Brand>
-                
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                
-                <Navbar.Collapse id="basic-navbar-nav">
-                    
-                    {/* 2. Main Navigation Links (Left) */}
-                    <Nav className="me-auto">
-                        <Nav.Link as={Link} to="/">Home</Nav.Link>
-                        <Nav.Link as={Link} to="/shop">Shop All</Nav.Link>
-                        {/* Optional protected link */}
-                        {isAuthenticated && (
-                            <Nav.Link as={Link} to="/account">Account</Nav.Link>
-                        )}
-                    </Nav>
-                    
-                    {/* 3. Utility/Auth Links (Right, pushed by 'ms-auto') */}
-                    {/* This group pushes to the right due to the "me-auto" on the primary Nav above */}
-                    <Nav className="d-flex align-items-center">
-                        
-                        {/* Cart Link (Always visible) */}
-                        <Button variant='outline-light' className="mx-2" onClick={handleCartShow}>
-                            {/* Placeholder for Cart Icon (e.g., Shopping Cart SVG) */}
-                            🛒 Cart ({itemCount}){itemCount > 0 && ` - $${subtotal.toFixed(2)}`}
-                        </Button>
-                        <Offcanvas show={showCart} onHide={handleCartClose} placement="end">
-                            <Offcanvas.Header closeButton>
-                                <Offcanvas.Title>Your Cart</Offcanvas.Title>
-                            </Offcanvas.Header>
-                            <Offcanvas.Body className="d-flex flex-column">
-                                {items.length === 0 ? (
-                                    <div className="text-center text-muted py-5">
-                                        <div className="display-6 mb-3">🛒</div>
-                                        <h5 className="fw-semibold mb-2">Your cart is empty</h5>
-                                        <p className="mb-3">Browse products and add items to your cart.</p>
-                                        <Button
-                                            variant="dark"
-                                            as={Link}
-                                            to="/shop"
-                                            onClick={handleCartClose}
-                                        >
-                                            Start Shopping
-                                        </Button>
-                                    </div>
-                                ) : (
-                                    <>
-                                        <ul className="list-group mb-3">
-                                            {items.map(item => (
-                                                <li
-                                                    key={item.id}
-                                                    className="list-group-item border-0 border-bottom d-flex justify-content-between align-items-center px-0"
-                                                >
-                                                    <div className="flex-grow-1 me-3">
-                                                        <div className="d-flex justify-content-between align-items-start">
-                                                            <span className="fw-semibold">{item.name}</span>
-                                                            <span className="fw-bold">
-                                                                ${(item.price * item.quantity).toFixed(2)}
-                                                            </span>
-                                                        </div>
-                                                        <div className="text-muted small mt-1 d-flex align-items-center justify-content-between">
-                                                            <span>
-                                                                x ${item.price.toFixed(2)}
-                                                            </span>
-                                                            <div
-                                                                className="d-inline-flex align-items-center border border-warning rounded-pill px-2 py-1 bg-white ms-2"
-                                                                style={{ minWidth: '90px', justifyContent: 'space-between' }}
-                                                            >
-                                                                <Button
-                                                                    variant="link" style={{ textDecoration: "none" }}
-                                                                    size="sm"
-                                                                    className="p-0 text-dark"
-                                                                    onClick={() => handleRemoveFromCart(item.id)}
-                                                                    aria-label={`Decrease quantity of ${item.name}`}
-                                                                >
-                                                                    −
-                                                                </Button>
-                                                                <span className="mx-2 fw-semibold">
-                                                                    {item.quantity}
-                                                                </span>
-                                                                <Button
-                                                                    variant="link" style={{ textDecoration: "none" }}
-                                                                    size="sm"
-                                                                    className="p-0 text-dark"
-                                                                    onClick={() => handleIncreaseQuantity(item)}
-                                                                    aria-label={`Increase quantity of ${item.name}`}
-                                                                >
-                                                                    +
-                                                                </Button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            ))}
-                                        </ul>
+  const NavLink = ({ topText, bottomText, icon: Icon, isDropdown = false }) => (
+    <div
+      className={`group flex flex-col justify-center h-full p-2 text-white border border-transparent hover:border-white cursor-pointer ${
+        bottomText === 'Cart' ? 'flex-row items-end' : ''
+      }`}
+    >
+      {Icon && bottomText === 'Cart' ? (
+        <>
+        <button onClick={() => {navigate('/cart')}}>
+          <div className="relative">
+            
+            <Icon size={30} strokeWidth={1.5} />
+            <span className="absolute -top-1 left-4 w-4 h-4 bg-red-500 text-xs font-bold rounded-full flex items-center justify-center text-black">
+              {itemCount === undefined ? 0 : itemCount}
+            </span>
+            
+          </div>
+          <span className="ml-1 text-base font-bold whitespace-nowrap">Cart</span>
+          </button>
+        </>
+      ) : (
+        <>
+          <span className="text-xs leading-3 whitespace-nowrap">{topText}</span>
+          <span className="font-bold text-sm whitespace-nowrap flex items-center">
+            {bottomText} {isDropdown && <ChevronDown size={14} className="ml-0.5" />}
+          </span>
+        </>
+      )}
+    </div>
+  );
 
-                                        <div className="mt-auto border-top pt-3">
-                                            <div className="d-flex justify-content-between align-items-center mb-3">
-                                                <span className="fw-semibold">Subtotal</span>
-                                                <span className="fs-5 fw-bold text-success">
-                                                    ${subtotal.toFixed(2)}
-                                                </span>
-                                            </div>
-                                            <div className="d-grid gap-2">
-                                                <Button
-                                                    variant="warning"
-                                                    as={Link}
-                                                    to="/checkout"
-                                                    onClick={handleCartClose}
-                                                >
-                                                    Proceed to Checkout
-                                                </Button>
-                                                <Button
-                                                    variant="outline-secondary"
-                                                    as={Link}
-                                                    to="/shop"
-                                                    onClick={handleCartClose}
-                                                >
-                                                    Continue Shopping
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    </>
-                                )}
-                            </Offcanvas.Body>
-                        </Offcanvas>
+  return (
+    <div className="flex flex-col w-full">
 
-                        {isAuthenticated ? (
-                            // Logged-in view
-                            <Button variant="outline-danger" as={Link} to="/logout">
-                                Log Out
-                            </Button>
-                        ) : (
-                            // Anonymous view
-                            <>
-                                <Button variant="outline-light" onClick={handleShowLogin} className="me-2">
-                                    Log In
-                                </Button>
-                                <Offcanvas show={showLogin} onHide={handleCloseLogin} placement="end">
-                                    <Offcanvas.Header closeButton>
-                                    {/* <Offcanvas.Title>Log In</Offcanvas.Title> */}
-                                    </Offcanvas.Header>
-                                    <Offcanvas.Body>
-                                    <LoginPage />
-                                    </Offcanvas.Body>
-                                </Offcanvas>
-                                <Button variant="warning" onClick={handleShowLogin}>
-                                    Sign Up
-                                </Button>
-                            </>
-                        )}
-                    </Nav>
-                    
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
-    );
-}
+      <div className="bg-[#124b45] flex justify-between gap-2 items-center h-[60px] px-2 text-white font-inter shadow-md">
+        {/* Logo */}
+        <button onClick={() => navigate('/')} className="flex items-center">
+        <div className="flex items-center h-full border border-transparent p-1 mr-2 hover:border-slate-50 cursor-pointer">
+          <svg className="h-6 w-auto" viewBox="0 0 100 30" fill="white">
+            <rect x="0" y="0" width="100" height="30" fill="none" />
+            <text x="50" y="20" fontSize="18" fontWeight="bold" fill="white" textAnchor="middle">
+              ECO SHOP
+            </text>
+            <text x="50" y="28" fontSize="6" fontWeight="normal" fill="white" textAnchor="middle">
+              Marketplace
+            </text>
+          </svg>
+        </div>
+        </button>
+
+        {/* Deliver To */}
+        {( userInfoState !== null ) && (
+          <div className="hidden lg:flex items-center gap-0.5">
+            <div className="flex">
+              <MapPin size={18} />
+            </div>
+            <div className="flex flex-col leading-none">
+              <p className="text-xs">Deliver to</p>
+              <p className="font-bold text-sm">{addressInfo.city} {addressInfo.postal_code}</p>
+            </div> 
+          </div>
+        )}
+        {/* Search Bar */}
+        <form onSubmit={handleSearchSubmit} className="flex-grow h-[40px] hidden md:flex mx-2">
+          <div className="relative group">
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="bg-gray-200 text-gray-800 text-sm h-full rounded-l-md border-r border-gray-400 focus:outline-none px-2 cursor-pointer hover:bg-gray-300 transition duration-150"
+            >
+              <option value="">All Categories</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder={`Search ${selectedCategory ? 'category' : 'all'} on EcoShop`}
+            className="flex-grow h-full bg-gray-200 p-2 text-black focus:outline-none focus:ring-2 focus:ring-[#ff6f7e] focus:border-transparent text-base"
+          />
+
+          <button
+            type="submit"
+            className="bg-[#ff6f7e] hover:bg-[#ff8591] text-black h-full w-12 rounded-r-md flex items-center justify-center transition duration-150"
+          >
+            <Search size={24} strokeWidth={2.5} />
+          </button>
+        </form>
+
+        {/* Right Links */}
+        <div className="flex items-center space-x-2 ml-auto flex-grow justify-evenly sm:flex-grow-0">
+          {/* <div className="hidden md:flex items-center h-full border border-transparent hover:border-white cursor-pointer p-1">
+            <span className="text-sm font-bold mr-1">🇨🇦</span>
+            <span className="text-sm font-bold">EN</span>
+            <ChevronDown size={14} className="ml-0.5" />
+          </div> */}
+
+          {/* <NavLink topText="Hello, Sign In" bottomText="Account & Lists" icon={User} isDropdown /> */}
+        <button
+          onClick={handleAccountClick}
+          className="group flex flex-col justify-center h-full p-2 text-white border border-transparent hover:border-white cursor-pointer"
+        >
+          <span className="text-xs leading-3 whitespace-nowrap">Hello {userInfoState === null ? "Guest" : userInfoState.first_name}</span>
+          <span className="font-bold text-sm whitespace-nowrap flex items-center">
+            {isAuthenticated ? "Sing Out" : "Sign In"} <ChevronDown size={14} className="ml-0.5" />
+          </span>
+        </button>
+
+        <button onClick={() => {
+          isAuthenticated ? navigate('/account') : navigate('/login')
+        }}>
+          <div className="hidden lg:block">
+            <NavLink topText="Account" bottomText="& Orders" icon={Repeat2} />
+          </div>
+        </button>
+          <NavLink topText="" bottomText="Cart" icon={ShoppingCart} />
+
+          <button className="md:hidden p-2 text-white">
+            <Menu size={24} onClick={() => { setDrawerSide('right'); setShowMenu(true); }} />
+          </button>
+        </div>
+      </div>
+
+      {/* Bottom Bar */}
+      <div className="bg-[#0f3d3b] gap-3 h-8 flex items-center text-white px-2 text-sm space-x-4 overflow-x-auto whitespace-nowrap font-inter shadow-md">
+        <button onClick={() => { setDrawerSide('left'); setShowMenu(true); }} className="mr-1 text-white hover:text-gray-300">
+          <Menu size={20} />
+        </button>
+        <a href="#" className="border border-transparent hover:border-white cursor-pointer p-1">
+          All
+        </a>
+        <a href="#" className="border border-transparent hover:border-white cursor-pointer p-1">
+          Prime
+        </a>
+        <a href="#" className="border border-transparent hover:border-white cursor-pointer p-1">
+          Today&apos;s Deals
+        </a>
+        <a href="#" className="border border-transparent hover:border-white cursor-pointer p-1">
+          Customer Service
+        </a>
+        <a href="#" className="border border-transparent hover:border-white cursor-pointer p-1 hidden sm:inline">
+          Registry
+        </a>
+        <a href="#" className="border border-transparent hover:border-white cursor-pointer p-1 hidden sm:inline">
+          Gift Cards
+        </a>
+      </div>
+
+      {showMenu && (
+        <div className="fixed inset-0 z-50 flex">
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setShowMenu(false)}
+            aria-hidden="true"
+          />
+          <div className={`relative flex h-full w-full max-w-xs flex-col bg-white shadow-2xl ${drawerSide === 'right' ? 'ml-auto' : 'mr-auto'}`}>
+            <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3 bg-[#124b45] text-white">
+              <div>
+                <p className="text-xs">Hello</p>
+                <p className="text-sm font-semibold">
+                  {userInfoState?.first_name || userInfoState?.username || "Guest"}
+                </p>
+              </div>
+              <button
+                onClick={() => setShowMenu(false)}
+                className="rounded-md px-2 py-1 text-xs font-semibold hover:bg-white/10"
+              >
+                Close
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto">
+              <nav className="flex flex-col divide-y divide-slate-100">
+                <button
+                  onClick={() => {navigate('/shop'); setShowMenu(false);}}
+                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                >
+                  Shop
+                </button>
+                <button
+                  onClick={() => {navigate('/categories'); setShowMenu(false);}}
+                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                >
+                  Categories
+                </button>
+                <button
+                  onClick={() => {navigate('/cart'); setShowMenu(false);}}
+                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                >
+                  Cart ({itemCount || 0})
+                </button>
+                <button
+                  onClick={() => {navigate('/orders'); setShowMenu(false);}}
+                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                >
+                  Orders
+                </button>
+                <button
+                  onClick={() => {navigate('/account'); setShowMenu(false);}}
+                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                >
+                  Account
+                </button>
+                <button
+                  onClick={() => {navigate('/contact'); setShowMenu(false);}}
+                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                >
+                  Contact Us
+                </button>
+                <button
+                  onClick={() => {navigate('/faq'); setShowMenu(false);}}
+                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                >
+                  FAQ
+                </button>
+                {isAuthenticated ? (
+                  <button
+                    onClick={() => {navigate('/logout'); setShowMenu(false);}}
+                    className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                  >
+                    Sign Out
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {navigate('/login'); setShowMenu(false);}}
+                    className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                  >
+                    Sign In
+                  </button>
+                )}
+              </nav>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Navbar;

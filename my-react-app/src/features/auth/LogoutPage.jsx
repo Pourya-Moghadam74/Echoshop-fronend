@@ -1,65 +1,52 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Card, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from "../auth/authSlice";
-import { clearCart } from "../cart/cartSlice";
-
+import { logout } from '../auth/authSlice';
+import { clearCart } from '../cart/cartSlice';
+import { resetUserState } from '../user/userSlice';
 
 const LOGOUT_URL = 'http://localhost:8000/api/token/blacklist/';
 
 export default function LogoutPage() {
-  const [statusMessage, setStatusMessage] = useState("Logging out...");
-  const refreshToken = useSelector(state => state.auth.refreshToken);
-  const cartItems = useSelector(state => state.cart.items);
-  const navigate = useNavigate();
+  const [statusMessage] = useState('Logging out...');
+  const refreshToken = useSelector((state) => state.auth.refreshToken);
   const dispatch = useDispatch();
-  
+  const navigate = useNavigate();
+
   useEffect(() => {
+    let timer;
     const performLogout = async () => {
       try {
         if (refreshToken) {
           try {
-            await axios.post(
-              LOGOUT_URL, 
-              { refresh: refreshToken },
-              { withCredentials: true } 
-            );
+            await axios.post(LOGOUT_URL, { refresh: refreshToken }, { withCredentials: true });
           } catch (error) {
-            // Handle failure (e.g., server down or token already invalid)
-            console.error("Server-side logout failed, performing client-side cleanup.", error);
+            console.error('Server-side logout failed, performing client-side cleanup.', error);
           }
         }
-
-        // 3. Perform client-side cleanup (always happens)
-        dispatch(logout());
-        dispatch(clearCart());
       } catch (error) {
-        // Ensure cleanup happens even if something fails
-        console.error("Error during logout:", error);
+        console.error('Error during logout:', error);
+      } finally {
         dispatch(logout());
         dispatch(clearCart());
+        dispatch(resetUserState());
+        timer = setTimeout(() => navigate('/'), 1000);
       }
     };
 
     performLogout();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Run only once on mount
-
-  setTimeout(() => {
-    navigate('/'); 
-  }, 1000);
-  // };
+    return () => clearTimeout(timer);
+  }, [dispatch, navigate, refreshToken]);
 
   return (
-    <Container className="d-flex justify-content-center align-items-center min-vh-100">
-      <Card className="shadow-sm p-4 text-center" style={{ width: '100%', maxWidth: '400px' }}>
-        <Card.Body>
-          <Card.Title>{statusMessage}</Card.Title>
-          {statusMessage === "Logging out..." && <Spinner animation="border" className="mt-3" />}
-        </Card.Body>
-      </Card>
-    </Container>
+    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+      <div className="w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-lg">
+        <h3 className="text-lg font-semibold text-slate-900">{statusMessage}</h3>
+        <div className="mt-4 flex justify-center">
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-300 border-t-slate-700" />
+        </div>
+      </div>
+    </div>
   );
 }

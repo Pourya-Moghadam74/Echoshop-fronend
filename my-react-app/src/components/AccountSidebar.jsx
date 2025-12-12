@@ -1,7 +1,7 @@
 import React from "react";
 import { FaUser, FaClipboardList, FaLock, FaSignOutAlt, FaHome, FaAddressCard, FaCreditCard, FaHeart } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
-import "../../public/css/AccountSidebar.css";
+// import "../../public/css/AccountSidebar.css";
 
 const sidebarItems = [
   {

@@ -15,7 +15,7 @@ export const getCart = async () => {
 
     return {
       items,
-      itemCount: items.length,
+      itemCount: items.reduce((count, item) => count + item.quantity, 0),
       subtotal: parseFloat(cartData.subtotal || 0),
     };
   } catch (error) {
