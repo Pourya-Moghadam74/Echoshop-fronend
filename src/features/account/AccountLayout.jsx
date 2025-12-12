@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 import AppNavbar from "../../components/AppNavbar";
 import { useSelector } from "react-redux";
-import Sitefooter from "../../components/Sitefooter";
+import Sitefooter from "../../components/SiteFooter";
 
 export default function AccountLayout() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
