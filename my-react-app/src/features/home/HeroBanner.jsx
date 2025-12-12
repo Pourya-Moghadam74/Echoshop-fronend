@@ -32,7 +32,7 @@ export default function HeroCarousel() {
   }, []);
 
   return (
-    <div className="relative h-[500px] overflow-hidden max-w-6xl">
+    <div className="relative h-[480px] overflow-hidden rounded-3xl border border-slate-200 bg-slate-900 shadow-sm">
       {/* Slides */}
       {slides.map((slide, index) => (
         <div
@@ -48,13 +48,27 @@ export default function HeroCarousel() {
           />
 
           {/* Caption */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-white bg-black/20">
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-white bg-gradient-to-r from-black/50 via-black/30 to-black/10 px-6 text-center">
             <h1 className="text-4xl md:text-5xl font-bold drop-shadow-md">
               {slide.title}
             </h1>
-            <p className="text-lg md:text-xl mt-2 drop-shadow-md">
+            <p className="text-lg md:text-xl mt-3 drop-shadow-md max-w-2xl">
               {slide.text}
             </p>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+              <a
+                href="/shop"
+                className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:shadow"
+              >
+                Shop now
+              </a>
+              <a
+                href="/categories"
+                className="rounded-xl border border-white/70 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-white/10"
+              >
+                Browse categories
+              </a>
+            </div>
           </div>
         </div>
       ))}

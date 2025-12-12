@@ -193,24 +193,27 @@ const Navbar = () => {
         <button onClick={() => { setDrawerSide('left'); setShowMenu(true); }} className="mr-1 text-white hover:text-gray-300">
           <Menu size={20} />
         </button>
-        <a href="#" className="border border-transparent hover:border-white cursor-pointer p-1">
-          All
-        </a>
-        <a href="#" className="border border-transparent hover:border-white cursor-pointer p-1">
-          Prime
-        </a>
-        <a href="#" className="border border-transparent hover:border-white cursor-pointer p-1">
-          Today&apos;s Deals
-        </a>
-        <a href="#" className="border border-transparent hover:border-white cursor-pointer p-1">
-          Customer Service
-        </a>
-        <a href="#" className="border border-transparent hover:border-white cursor-pointer p-1 hidden sm:inline">
-          Registry
-        </a>
-        <a href="#" className="border border-transparent hover:border-white cursor-pointer p-1 hidden sm:inline">
-          Gift Cards
-        </a>
+        <button onClick={() => navigate('/shop')} className="border border-transparent hover:border-white cursor-pointer p-1">
+          Shop
+        </button>
+        <button onClick={() => navigate('/categories')} className="border border-transparent hover:border-white cursor-pointer p-1">
+          Categories
+        </button>
+        <button onClick={() => navigate('/orders')} className="border border-transparent hover:border-white cursor-pointer p-1">
+          Orders
+        </button>
+        <button onClick={() => navigate('/contact')} className="border border-transparent hover:border-white cursor-pointer p-1">
+          Contact
+        </button>
+        <button onClick={() => navigate('/faq')} className="border border-transparent hover:border-white cursor-pointer p-1 hidden sm:inline">
+          FAQ
+        </button>
+        <button onClick={() => navigate('/terms')} className="border border-transparent hover:border-white cursor-pointer p-1 hidden sm:inline">
+          Terms
+        </button>
+        <button onClick={() => navigate('/privacy')} className="border border-transparent hover:border-white cursor-pointer p-1 hidden sm:inline">
+          Privacy
+        </button>
       </div>
 
       {showMenu && (
