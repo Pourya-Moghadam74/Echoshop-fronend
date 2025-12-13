@@ -22,9 +22,12 @@ import AddressPage from './features/account/AddressPage.jsx';
 import CartPage from './features/cart/CartPage.jsx';
 import CheckoutPage from './features/cart/CheckoutPage.jsx';
 import SecurityPage from './features/account/SecurityPage.jsx';
+import { Toaster } from "react-hot-toast";
 
 export default function RouterConfig() {
   return (
+    <>
+      <Toaster position="bottom-right" toastOptions={{duration: 2500,}}/>
     <HashRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -51,5 +54,6 @@ export default function RouterConfig() {
         </Route>
       </Routes>
     </HashRouter>
+    </>
   );
 }

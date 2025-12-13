@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../features/cart/cartSlice';
+import toast from "react-hot-toast";
 
 export default function ProductCard({
   id,
@@ -24,7 +25,8 @@ export default function ProductCard({
         price: parseFloat(price),
         quantity: 1,
       })
-    );
+    )
+    toast.success("Added to cart 🛒");;
   };
 
   const displayPrice = price

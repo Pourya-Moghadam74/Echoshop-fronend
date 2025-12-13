@@ -19,32 +19,60 @@ export default function CartPage() {
   const handleRemove = (id) => dispatch(removeFromCart(id));
   const handleClear = () => dispatch(clearCart());
   
-  useEffect(() => {
-    let cancelled = false;
+useEffect(() => {
+  let cancelled = false;
 
-    const fetchMissingImages = async () => {
-      const missing = items.filter((item) => !imageMap[item.id]);
-      if (!missing.length) return;
+  const fetchMissingImages = async () => {
+    const missing = items.filter((item) => !imageMap[item.id]);
+    if (!missing.length) return;
 
-      await Promise.all(
-        missing.map(async (item) => {
-          try {
-            const { data } = await axiosInstance.get(`api/products/${item.id}/`);
-            const img =
-              data?.image ||
-              data?.images?.[0]?.url ||
-              null;
+    await Promise.all(
+      missing.map(async (item) => {
+        try {
+          const { data } = await axiosInstance.get(
+            `api/products/${item.id}/`
+          );
 
-            if (!cancelled && img) {
-              setImageMap((prev) => ({ ...prev, [item.id]: img }));
+          let img = data?.image || null;
+
+          // No image at all → frontend placeholder
+          if (!img) {
+            img = `${BASE}media/product_images/placeholder.jpg`;
+          } else {
+            const filename = img.split("/").pop().toLowerCase();
+
+            // Detect placeholder coming from backend or dataset
+            const isPlaceholder =
+              filename.includes("placeholder") ||
+              filename.includes("default") ||
+              filename === "no-image.jpg";
+
+            if (isPlaceholder) {
+              img = `${BASE}media/product_images/placeholder.jpg`;
+            } else {
+              // Real product image
+              img = `${BASE}media/product_images/2025/11/26/${filename}`;
             }
-          } catch (err) {
-            // If fetch fails, just skip; item will fall back to placeholder
-            console.error('Error fetching product image', err);
           }
-        })
-      );
-    };
+
+          if (!cancelled) {
+            setImageMap((prev) => ({ ...prev, [item.id]: img }));
+          }
+        } catch (err) {
+          console.error("Error fetching product image", err);
+
+          if (!cancelled) {
+            setImageMap((prev) => ({
+              ...prev,
+              [item.id]: `${BASE}media/product_images/placeholder.jpg`,
+            }));
+          }
+        }
+      })
+    );
+  };
+
+  fetchMissingImages();
 
     fetchMissingImages();
     return () => {
