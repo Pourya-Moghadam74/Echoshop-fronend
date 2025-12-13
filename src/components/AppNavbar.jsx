@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchCategories } from '../features/category/categorySlice';
-import LoginPage from '../features/auth/LoginPage.jsx';
 import { useCartSync } from '../hooks/useCartSync.js';
 import { useAddressesSync } from '../hooks/useAddressesSync.js';
 import { useUserInfoSync } from '../hooks/useUserInfoSync.js';
@@ -182,7 +181,7 @@ const Navbar = () => {
         </button>
           <NavLink topText="" bottomText="Cart" icon={ShoppingCart} />
 
-          <button className="md:hidden p-2 text-white">
+          <button className="md:hidden p-0 text-white">
             <Menu size={24} onClick={() => { setDrawerSide('right'); setShowMenu(true); }} />
           </button>
         </div>
