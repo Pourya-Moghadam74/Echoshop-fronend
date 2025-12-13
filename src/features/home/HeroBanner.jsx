@@ -57,13 +57,13 @@ export default function HeroCarousel() {
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <a
-                href="/shop"
+                href={`${import.meta.env.BASE_URL}shop`}
                 className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:shadow"
               >
                 Shop now
               </a>
               <a
-                href="/categories"
+                href={`${import.meta.env.BASE_URL}categories`}
                 className="rounded-xl border border-white/70 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-white/10"
               >
                 Browse categories

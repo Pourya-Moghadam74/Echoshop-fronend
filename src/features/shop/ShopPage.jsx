@@ -45,7 +45,7 @@ export default function ShopPage() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axiosInstance.get('categories/');
+        const response = await axiosInstance.get('api/categories/');
         let categoriesData = [];
         if (Array.isArray(response.data)) {
           categoriesData = response.data;
@@ -85,7 +85,7 @@ export default function ShopPage() {
         else if (sortBy === 'name') params.ordering = 'name';
         else if (sortBy === 'newest') params.ordering = '-created_at';
 
-        const response = await axiosInstance.get('products/', { params });
+        const response = await axiosInstance.get('api/products/', { params });
 
         if (response.data && response.data.results) {
           setProducts(response.data.results);
