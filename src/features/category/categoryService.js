@@ -2,7 +2,7 @@ import axiosInstance from '../../api/axiosInstance';
 
 export const fetchCategories = async () => {
   try {
-    const res = await axiosInstance.get('categories/');
+    const res = await axiosInstance.get('api/categories/');
     const data = res?.data;
 
     if (Array.isArray(data)) return data;
