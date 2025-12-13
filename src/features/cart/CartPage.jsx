@@ -50,7 +50,7 @@ useEffect(() => {
               img = `${BASE}media/product_images/2025/11/25/placeholder.jpg`;
             } else {
               // Real product image
-              img = `${BASE}media/product_images/2025/11/25/${filename}`;
+              img = `${BASE}media/product_images/2025/11/26/${filename}`;
             }
           }
 
