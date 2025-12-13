@@ -324,7 +324,7 @@ export default function ShopPage() {
 
                         if (!imageUrl) {
                           // No image at all → frontend placeholder
-                          imageUrl = `${BASE}media/product_images/placeholder.jpg`;
+                          imageUrl = `${BASE}media/product_images/2025/11/26/placeholder.jpg`;
                         } else {
                           const filename = imageUrl.split('/').pop().toLowerCase();
 
@@ -335,7 +335,7 @@ export default function ShopPage() {
                             filename === 'no-image.jpg';
 
                           if (isPlaceholder) {
-                            imageUrl = `${BASE}media/product_images/placeholder.jpg`;
+                            imageUrl = `${BASE}media/product_images/2025/11/26/placeholder.jpg`;
                           } else {
                             // Real product image
                             imageUrl = `${BASE}media/product_images/2025/11/26/${filename}`;

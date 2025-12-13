@@ -40,7 +40,7 @@ export default function ProductPage() {
  
   const imageUrl = useMemo(() => {
     const BASE = import.meta.env.BASE_URL;
-    const PLACEHOLDER = `${BASE}media/product_images/placeholder.jpg`;
+    const PLACEHOLDER = `${BASE}media/product_images/2025/11/26/placeholder.jpg`;
 
     if (!product?.image) return PLACEHOLDER;
 
