@@ -10,7 +10,7 @@ const blankAddress = {
     full_name: "",
     street_address: "",
     city: "",
-    state: "",
+    state_province: "",
     postal_code: "",
     country: "",
   };
@@ -29,7 +29,7 @@ export default function AddressPage() {
     e.preventDefault();
     setDeleting(true);
     try {
-      await dispatch(updateUserAddresses({ id: form.id, delete: true })).unwrap(); // ensure this thunk exists
+      await dispatch(updateUserAddresses({ id: form.id, delete: true })).unwrap();
       closeDrawer();
     } catch (err) {
       console.error('Delete user info failed', err);
@@ -64,19 +64,19 @@ export default function AddressPage() {
     e.preventDefault();
     setSubmitting(true);
     try {
-        if (form.id == null) {
-            await createUserAddresses(form);
-            dispatch(fetchUserAddresses());
-            } else {
-      await dispatch(updateUserAddresses(form)).unwrap();
+      if (form.id == null) {
+        await createUserAddresses(form);
+        dispatch(fetchUserAddresses());
+      } else {
+        await dispatch(updateUserAddresses(form)).unwrap();
+      }
+
       dispatch(fetchUserAddresses());
-      closeDrawer();
-            }
+      closeDrawer(); 
     } catch (err) {
       console.error('Save address failed', err);
     } finally {
       setSubmitting(false);
-      setDrawerOpen(false)
     }
   };
 
