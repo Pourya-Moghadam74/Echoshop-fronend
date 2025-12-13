@@ -181,7 +181,7 @@ const Navbar = () => {
         </button>
           <NavLink topText="" bottomText="Cart" icon={ShoppingCart} />
 
-          <button className="md:hidden p-0 text-white">
+          <button className="md:hidden p-2 text-white">
             <Menu size={24} onClick={() => { setDrawerSide('right'); setShowMenu(true); }} />
           </button>
         </div>
