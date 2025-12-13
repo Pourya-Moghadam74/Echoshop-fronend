@@ -29,7 +29,7 @@ export default function CartPage() {
       await Promise.all(
         missing.map(async (item) => {
           try {
-            const { data } = await axiosInstance.get(`/api/products/${item.id}/`);
+            const { data } = await axiosInstance.get(`api/products/${item.id}/`);
             const img =
               data?.image ||
               data?.images?.[0]?.url ||

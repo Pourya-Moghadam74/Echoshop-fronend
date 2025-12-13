@@ -22,12 +22,10 @@ import AddressPage from './features/account/AddressPage.jsx';
 import CartPage from './features/cart/CartPage.jsx';
 import CheckoutPage from './features/cart/CheckoutPage.jsx';
 import SecurityPage from './features/account/SecurityPage.jsx';
-import CartNotice from './components/CartNotice.jsx';
 
 export default function RouterConfig() {
   return (
     <HashRouter>
-      <CartNotice />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/shop" element={<ShopPage />} />
