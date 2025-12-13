@@ -63,13 +63,11 @@ export default function FeaturedProductGrid() {
     <div className="flex justify-center py-4 mb-4">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         {products.slice(0, 4).map((product) => {
-            let imageUrl = product.image || null;
-            if (imageUrl) {
-              // Always map to frontend images when running on GitHub Pages
-              const filename = imageUrl.split('/').pop(); // "11.jpg"
-
-            // Point GitHub Pages to its own repo
-            imageUrl = `${import.meta.env.BASE_URL}media/product_images/2025/11/26/${imageUrl}`;
+          let imageUrl = product.image || null;
+          if (imageUrl) {
+            // Always map to frontend images when running on GitHub Pages
+            const filename = imageUrl.split('/').pop(); // "11.jpg"
+            imageUrl = `${import.meta.env.BASE_URL}media/product_images/2025/11/26/${filename}`;
           }
 
           return (
