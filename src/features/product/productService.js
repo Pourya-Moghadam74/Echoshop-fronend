@@ -13,7 +13,7 @@ export const fetchProducts = async (params = {}) => {
 
 export const fetchProductById = async (productId) => {
   try {
-    const res = await axiosInstance.get(`products/${productId}/`);
+    const res = await axiosInstance.get(`api/products/${productId}/`);
     return res?.data;
   } catch (err) {
     console.error(`Error fetching product with ID ${productId}:`, err);

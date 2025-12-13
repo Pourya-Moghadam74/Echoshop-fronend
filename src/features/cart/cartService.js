@@ -2,7 +2,7 @@ import axiosInstance from '../../api/axiosInstance';
 
 export const getCart = async () => {
   try {
-    const response = await axiosInstance.get('cart/');
+    const response = await axiosInstance.get('api/cart/');
     const cartData = response.data;
 
     // Transform backend format to frontend format
@@ -32,7 +32,7 @@ export const getCart = async () => {
 
 export const addItemToCart = async (productId, quantity = 1) => {
   try {
-    const response = await axiosInstance.post('cart/items/', {
+    const response = await axiosInstance.post('api/cart/items/', {
       product_id: productId,
       quantity: quantity,
     });
@@ -49,7 +49,7 @@ export const updateCartItem = async (cartItemId, quantity) => {
   try {
     // Since PATCH might not work reliably, we'll delete and recreate
     // This is handled by the sync function
-    const response = await axiosInstance.patch(`cart/items/${cartItemId}/`, {
+    const response = await axiosInstance.patch(`api/cart/items/${cartItemId}/`, {
       quantity: quantity,
     });
     return response.data;
@@ -66,7 +66,7 @@ export const updateCartItem = async (cartItemId, quantity) => {
  */
 export const removeItemFromCart = async (cartItemId) => {
   try {
-    await axiosInstance.delete(`cart/items/${cartItemId}/`);
+    await axiosInstance.delete(`api/cart/items/${cartItemId}/`);
   } catch (error) {
     // Ignore 404 (item already deleted)
     if (error.response?.status !== 404) {
@@ -83,7 +83,7 @@ export const clearCartOnBackend = async () => {
     if (cart.items.length > 0) {
       const deletePromises = cart.items.map(async (item) => {
         // We need the backend cart item ID, so fetch full cart first
-        const fullCart = await axiosInstance.get('cart/');
+        const fullCart = await axiosInstance.get('api/cart/');
         const backendItem = fullCart.data.items.find(
           bi => bi.product.id === item.id
         );
@@ -108,13 +108,13 @@ export const syncCartToBackend = async (frontendItems = []) => {
   isSyncing = true;
 
   try {
-    const backendCart = await axiosInstance.get("cart/");
+    const backendCart = await axiosInstance.get("api/cart/");
     const backendItems = backendCart.data.items || [];
 
     // Delete every backend item
     await Promise.all(
       backendItems.map(item =>
-        axiosInstance.delete(`cart/items/${item.id}/`).catch(err => {
+        axiosInstance.delete(`api/cart/items/${item.id}/`).catch(err => {
           if (err.response?.status !== 404) throw err;
         })
       )
@@ -123,7 +123,7 @@ export const syncCartToBackend = async (frontendItems = []) => {
     // Add items from frontend
     await Promise.all(
       frontendItems.map(item =>
-        axiosInstance.post("cart/items/", {
+        axiosInstance.post("api/cart/items/", {
           product_id: item.id,
           quantity: item.quantity,
         })

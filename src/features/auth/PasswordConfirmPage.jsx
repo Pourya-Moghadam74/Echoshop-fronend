@@ -54,7 +54,7 @@ export default function PasswordConfirmPage() {
     }
     setLoading(true);
     try {
-      await axiosInstance.post("auth/password/reset/", {
+      await axiosInstance.post("api/auth/password/reset/", {
         uid: form.uid,
         token: form.token,
         new_password: form.newPassword,
