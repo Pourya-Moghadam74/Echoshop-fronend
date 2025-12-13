@@ -71,7 +71,7 @@ export default function CategoryTiles() {
             <div
               className="h-[310px] bg-gray-300 bg-cover bg-center flex items-end justify-center"
               style={{
-                backgroundImage: `url(/category-${category.id}-bg.jpg)`,
+                backgroundImage: `url(category-${category.id}-bg.jpg)`,
               }}
             >
               <div className="w-full bg-white bg-opacity-50 py-2 text-center">

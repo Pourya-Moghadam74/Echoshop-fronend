@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import ProductCard from '../../components/ProductCard.jsx';
 import axiosInstance from '../../api/axiosInstance.js';
 
-const FEATURED_PRODUCTS_URL = 'products/';
+const FEATURED_PRODUCTS_URL = 'api/products/';
 
 export default function FeaturedProductGrid() {
   const [products, setProducts] = useState([]);
