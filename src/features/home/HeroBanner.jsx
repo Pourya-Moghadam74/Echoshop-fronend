@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./HeroCarousel.css"; // Optional if you want to keep the same file name
+import { Link } from "react-router-dom";
 
 const slides = [
   {
@@ -55,20 +56,21 @@ export default function HeroCarousel() {
             <p className="text-lg md:text-xl mt-3 drop-shadow-md max-w-2xl">
               {slide.text}
             </p>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <a
-                href={`${import.meta.env.BASE_URL}shop`}
-                className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:shadow"
-              >
-                Shop now
-              </a>
-              <a
-                href={`${import.meta.env.BASE_URL}categories`}
-                className="rounded-xl border border-white/70 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-white/10"
-              >
-                Browse categories
-              </a>
-            </div>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              to="/shop"
+              className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:shadow"
+            >
+              Shop now
+            </Link>
+
+            <Link
+              to="/categories"
+              className="rounded-xl border border-white/70 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-white/10"
+            >
+              Browse categories
+            </Link>
+          </div>
           </div>
         </div>
       ))}

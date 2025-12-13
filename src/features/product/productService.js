@@ -2,7 +2,7 @@ import axiosInstance from '../../api/axiosInstance';
 
 export const fetchProducts = async (params = {}) => {
   try {
-    const res = await axiosInstance.get('products/', { params });
+    const res = await axiosInstance.get('api/products/', { params });
     const data = res?.data;
     return data;
   } catch (err) {
