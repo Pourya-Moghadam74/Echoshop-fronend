@@ -56,6 +56,7 @@ const cartSlice = createSlice({
     loading: false,
     error: null,
     loadedFromBackend: false,
+    notice: null,
   },
   reducers: {
     // Add item to cart (frontend only - sync handled separately)
@@ -63,6 +64,7 @@ const cartSlice = createSlice({
       const { id, name, price, quantity = 1 } = action.payload;
       
       const existingItem = state.items.find(item => item.id === id);
+      const displayName = name || existingItem?.name || "Item";
       
       if (existingItem) {
         existingItem.quantity += quantity;
@@ -73,12 +75,21 @@ const cartSlice = createSlice({
       const totals = calculateTotals(state.items);
       state.itemCount = totals.itemCount;
       state.subtotal = totals.subtotal;
+
+      state.notice = {
+        type: "add",
+        message: existingItem
+          ? `Added another ${displayName} to your cart.`
+          : `${displayName} added to your cart.`,
+        id: Date.now(),
+      };
     },
     
     // Remove item from cart (frontend only - sync handled separately)
     removeFromCart: (state, action) => {
       const idToRemove = action.payload;
       const item = state.items.find(item => item.id === idToRemove);
+      const displayName = item?.name || "item";
       
       if (item) {
         if (item.quantity > 1) {
@@ -91,6 +102,17 @@ const cartSlice = createSlice({
       const totals = calculateTotals(state.items);
       state.itemCount = totals.itemCount;
       state.subtotal = totals.subtotal;
+
+      if (item) {
+        state.notice = {
+          type: "remove",
+          message:
+            item.quantity > 0
+              ? `Removed one ${displayName}.`
+              : `${displayName} removed from your cart.`,
+          id: Date.now(),
+        };
+      }
     },
 
     // Update item quantity (frontend only - sync handled separately)
@@ -116,6 +138,11 @@ const cartSlice = createSlice({
       state.items = [];
       state.itemCount = 0;
       state.subtotal = 0.00;
+      state.notice = {
+        type: "info",
+        message: "Cart cleared.",
+        id: Date.now(),
+      };
       localStorage.removeItem("cart"); // optional
     },
 
@@ -128,6 +155,9 @@ const cartSlice = createSlice({
     },
     resetLoadedFromBackend: (state) => {
       state.loadedFromBackend = false;
+    },
+    clearNotice: (state) => {
+      state.notice = null;
     }
   },
   extraReducers: (builder) => {
@@ -165,7 +195,7 @@ const cartSlice = createSlice({
 });
 
 // Export actions
-export const { addToCart, removeFromCart, updateQuantity, clearCart, setCart, resetLoadedFromBackend } = cartSlice.actions;
+export const { addToCart, removeFromCart, updateQuantity, clearCart, setCart, resetLoadedFromBackend, clearNotice } = cartSlice.actions;
 
 // Export reducer
 export default cartSlice.reducer;
