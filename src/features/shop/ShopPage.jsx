@@ -323,7 +323,7 @@ export default function ShopPage() {
                           if (imageUrl) {
                             // Always map to frontend images when running on GitHub Pages
                             const filename = imageUrl.split('/').pop(); // "11.jpg"
-                            imageUrl = `${import.meta.env.BASE_URL}media/images/products/${filename}`;
+                            imageUrl = `${import.meta.env.BASE_URL}media/product_images/2025/11/26/${filename}`;
                           }
                           return (
                             <div key={product.id} className="h-full">
