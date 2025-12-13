@@ -322,6 +322,7 @@ export default function ShopPage() {
                           let imageUrl = product.image || null;
                           if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
                             imageUrl = `${import.meta.env.BASE_URL}${imageUrl}`;
+                            console.log(imageUrl)
                           }
 
                           return (
