@@ -36,7 +36,7 @@ useEffect(() => {
           let img = data?.image || null;
           const BASE = import.meta.env.BASE_URL;
           if (!img) {
-            img = `${BASE}media/product_images/2025/11/26/placeholder.jpg`;
+            img = `${BASE}media/product_images/2025/11/25/placeholder.jpg`;
           } else {
             const filename = img.split("/").pop().toLowerCase();
 
@@ -47,10 +47,10 @@ useEffect(() => {
               filename === "no-image.jpg";
 
             if (isPlaceholder) {
-              img = `${BASE}media/product_images/2025/11/26/placeholder.jpg`;
+              img = `${BASE}media/product_images/2025/11/25/placeholder.jpg`;
             } else {
               // Real product image
-              img = `${BASE}media/product_images/2025/11/26/${filename}`;
+              img = `${BASE}media/product_images/2025/11/25/${filename}`;
             }
           }
 
@@ -63,7 +63,7 @@ useEffect(() => {
           if (!cancelled) {
             setImageMap((prev) => ({
               ...prev,
-              [item.id]: `${BASE}media/product_images/2025/11/26/placeholder.jpg`,
+              [item.id]: `${BASE}media/product_images/2025/11/25/placeholder.jpg`,
             }));
           }
         }

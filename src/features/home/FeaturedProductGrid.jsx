@@ -68,7 +68,7 @@ export default function FeaturedProductGrid() {
 
         if (!imageUrl) {
           // No image at all → frontend placeholder
-          imageUrl = `${BASE}media/product_images/2025/11/26/placeholder.jpg`;
+          imageUrl = `${BASE}media/product_images/2025/11/25/placeholder.jpg`;
         } else {
           const filename = imageUrl.split('/').pop().toLowerCase();
 
@@ -79,7 +79,7 @@ export default function FeaturedProductGrid() {
             filename === 'no-image.jpg';
 
           if (isPlaceholder) {
-            imageUrl = `${BASE}media/product_images/2025/11/26/placeholder.jpg`;
+            imageUrl = `${BASE}media/product_images/2025/11/25/placeholder.jpg`;
           } else {
             // Real product image
             imageUrl = `${BASE}media/product_images/2025/11/26/${filename}`;
