@@ -320,11 +320,11 @@ export default function ShopPage() {
                       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         {products.map((product) => {
                           let imageUrl = product.image || null;
-                          if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
-                            imageUrl = `${import.meta.env.BASE_URL}${imageUrl}`;
-                            console.log(imageUrl)
+                          if (imageUrl) {
+                            // Always map to frontend images when running on GitHub Pages
+                            const filename = imageUrl.split('/').pop(); // "11.jpg"
+                            imageUrl = `${import.meta.env.BASE_URL}media/images/products/${filename}`;
                           }
-
                           return (
                             <div key={product.id} className="h-full">
                               <ProductCard
