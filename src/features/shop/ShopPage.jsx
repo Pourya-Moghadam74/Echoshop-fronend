@@ -321,7 +321,7 @@ export default function ShopPage() {
                         {products.map((product) => {
                           let imageUrl = product.image || null;
                           if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
-                            imageUrl = `${API_BASE}${imageUrl}`;
+                            imageUrl = `${import.meta.env.BASE_URL}${imageUrl}`;
                           }
 
                           return (
