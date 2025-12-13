@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://pourya-moghadam74.github.io/Echoshop",
+  "homepage": "https://pourya-moghadam74.github.io/Ecoshop",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
