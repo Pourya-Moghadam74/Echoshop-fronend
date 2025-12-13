@@ -62,13 +62,29 @@ export default function FeaturedProductGrid() {
   return (
     <div className="flex justify-center py-4 mb-4">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {products.slice(0, 4).map((product) => {
-          let imageUrl = product.image || null;
-          if (imageUrl) {
-            // Always map to frontend images when running on GitHub Pages
-            const filename = imageUrl.split('/').pop(); // "11.jpg"
-            imageUrl = `${import.meta.env.BASE_URL}media/product_images/2025/11/26/${filename}`;
+      {products.map((product) => {
+        let imageUrl = product.image || null;
+        const BASE = import.meta.env.BASE_URL;
+
+        if (!imageUrl) {
+          // No image at all → frontend placeholder
+          imageUrl = `${BASE}media/product_images/placeholder.jpg`;
+        } else {
+          const filename = imageUrl.split('/').pop().toLowerCase();
+
+          // Detect placeholder coming from backend or dataset
+          const isPlaceholder =
+            filename.includes('placeholder') ||
+            filename.includes('default') ||
+            filename === 'no-image.jpg';
+
+          if (isPlaceholder) {
+            imageUrl = `${BASE}media/product_images/placeholder.jpg`;
+          } else {
+            // Real product image
+            imageUrl = `${BASE}media/product_images/2025/11/26/${filename}`;
           }
+        }
 
           return (
             <div key={product.id} className="h-[360px] w-[220px]">

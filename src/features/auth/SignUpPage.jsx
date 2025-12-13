@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 const REGISTER_URL = `${API_BASE}/api/register/`;
@@ -175,9 +176,9 @@ export default function SignUpPage() {
 
         <p className="mt-4 text-center text-xs text-slate-500">
           Already have an account?{' '}
-          <a href="/login" className="font-semibold text-slate-900 hover:underline">
+          <Link to="/login" className="font-semibold text-slate-900 hover:underline">
             Log In Here
-          </a>
+          </Link>
         </p>
       </div>
     </div>

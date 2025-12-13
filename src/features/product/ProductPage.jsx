@@ -39,11 +39,26 @@ export default function ProductPage() {
   }, [id]);
  
   const imageUrl = useMemo(() => {
-    if (!product?.image) return "/placeholder-card.jpg";
-    if (product.image.startsWith("http") || product.image.startsWith("data:")) {
-      return product.image;
+    const BASE = import.meta.env.BASE_URL;
+    const PLACEHOLDER = `${BASE}media/product_images/placeholder.jpg`;
+
+    if (!product?.image) return PLACEHOLDER;
+
+    // Extract filename only
+    const filename = product.image.split("/").pop()?.toLowerCase();
+
+    // Backend placeholder or invalid image
+    if (
+      !filename ||
+      filename.includes("placeholder") ||
+      filename.includes("default") ||
+      filename.includes("no-image")
+    ) {
+      return PLACEHOLDER;
     }
-    return `${API_BASE}${product.image}`;
+
+    // Always load from frontend repo
+    return `${BASE}media/product_images/2025/11/26/${filename}`;
   }, [product]);
 
   const handleAddToCart = () => {

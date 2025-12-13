@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
+import { Link } from 'react-router-dom';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -115,9 +116,9 @@ export default function ForgotPasswordPage() {
 
           <div className="mt-6 text-center text-sm text-slate-600">
             Remembered your password?{" "}
-            <a href="/login" className="font-semibold text-slate-900 hover:underline">
+            <Link to="/login" className="font-semibold text-slate-900 hover:underline">
               Go back to login
-            </a>
+            </Link>
           </div>
         </div>
       </div>

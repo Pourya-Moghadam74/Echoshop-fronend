@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
+import { Link } from 'react-router-dom';
 
 const strengthFor = (pw) => {
   if (!pw) return { label: "Start typing", width: 0, color: "bg-slate-200", text: "text-slate-500" };
@@ -177,9 +178,9 @@ export default function PasswordConfirmPage() {
 
           <div className="mt-6 text-center text-sm text-slate-600">
             Have the wrong email or token?{" "}
-            <a href="/forgot-password" className="font-semibold text-slate-900 hover:underline">
+            <Link to="/forgot-password" className="font-semibold text-slate-900 hover:underline">
               Request a new link
-            </a>
+            </Link>
           </div>
         </div>
       </div>

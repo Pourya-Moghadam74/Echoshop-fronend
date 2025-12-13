@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { loginSuccess, setLoading } from '../auth/authSlice';
 import { loadCart } from '../cart/cartSlice';
+import { Link } from 'react-router-dom';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 const LOGIN_URL = `${API_BASE}/api/token/`;
@@ -90,9 +91,9 @@ export default function LoginPage({ onSuccess = () => {} }) {
               className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none"
             />
             <div className="text-right">
-              <a href="/forgot-password" className="text-xs font-semibold text-slate-700 hover:underline">
+              <Link to="/forgot-password" className="text-xs font-semibold text-slate-700 hover:underline">
                 Forgot password?
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -107,9 +108,12 @@ export default function LoginPage({ onSuccess = () => {} }) {
 
         <p className="mt-4 text-center text-xs text-slate-500">
           Don&apos;t have an account?{' '}
-          <a href="/signup" className="font-semibold text-slate-900 hover:underline">
+          <Link
+            to="/signup"
+            className="font-semibold text-slate-900 hover:underline"
+          >
             Sign Up Here
-          </a>
+          </Link>
         </p>
       </div>
     </div>
