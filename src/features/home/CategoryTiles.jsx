@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axiosInstance from "../../api/axiosInstance.js";
 import { Link } from "react-router-dom";
 
-const CATEGORY_URL = "api/categories/";
+const CATEGORY_URL = "/api/categories/";
 
 export default function CategoryTiles() {
   const [categories, setCategories] = useState([]);
